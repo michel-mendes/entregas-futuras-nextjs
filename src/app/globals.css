@@ -1,26 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer theme {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg-canvas: #f4f5f7;
+    --bg-surface: #ffffff;
+    --bg-subtle: #f0f1f3;
+
+    --brand-primary: rgb(217, 0, 0);
+    --brand-muted: rgba(217, 0, 0, 0.08);
+    --brand-muted-border: rgba(217, 0, 0, 0.20);
+
+    --text-primary: #111318;
+    --text-secondary: #4a4f5e;
+    --text-tertiary: #7a8090;
+    --text-disabled: #b0b5c0;
+
+    --border-subtle: #e2e4ea;
+    --border-default: #c8cbd5;
+
+    --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "DM Mono", ui-monospace, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-canvas: #0e0f12;
+      --bg-surface: #16181d;
+      --bg-subtle: #1a1c22;
+
+      --brand-muted: rgba(217, 0, 0, 0.12);
+      --brand-muted-border: rgba(217, 0, 0, 0.28);
+
+      --text-primary: #eceef2;
+      --text-secondary: #9ea5b5;
+      --text-tertiary: #626878;
+      --text-disabled: #3e4352;
+
+      --border-subtle: #1e2128;
+      --border-default: #282c36;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --color-canvas: var(--bg-canvas);
+  --color-surface: var(--bg-surface);
+  --color-subtle: var(--bg-subtle);
+
+  --color-brand: var(--brand-primary);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-border: var(--brand-muted-border);
+
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-tertiary: var(--text-tertiary);
+  --color-disabled: var(--text-disabled);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border: var(--border-default);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
+
+@layer base {
+  body {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  table,
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Customização fina de Scrollbar aceitável no global */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 4px;
 }
