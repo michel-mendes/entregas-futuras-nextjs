@@ -57,21 +57,39 @@ O fluxo de dados obedece estritamente a 5 camadas:
 - [ ] Romaneios e Entregas Parciais: Orquestração de saídas fracionadas de estoque. **(Em desenvolvimento)**
 
 ## 💻 Como rodar o projeto localmente
+### 1. Clone o repositório
 ```
-# 1. Clone o repositório
-git clone https://github.com/seu-usuario/nome-do-repo.git
+git clone https://github.com/michel-mendes/entregas-futuras-nextjs.git
+```
 
-# 2. Instale as dependências
+### 2. Instale as dependências
+```
 npm install
+```
 
-# 3. Configure as variáveis de ambiente
+### 3. Configure as variáveis de ambiente (Preencha as credenciais do MongoDB e portas)
+```
 cp .env.example .env.local
-# (Preencha as credenciais do MongoDB e portas)
+```
 
-# 4. Inicie o servidor de desenvolvimento
+### 4. Inicie o servidor de desenvolvimento
+```
 npm run dev
 ```
 
 Acesse http://localhost:3000 para visualizar a aplicação.
 
----
+
+## 🧪 Testes e Qualidade
+
+Este projeto adota uma abordagem rigorosa para testes de software, focando no isolamento de regras de negócio.
+
+- **Framework:** Jest + TS-Jest
+- **Estratégia:** Testes Unitários isolados na camada de **Service** (Core da aplicação).
+- **Mocking:** O acesso a dados (Repository) e validações de rede são "mockados" para garantir que os testes rodem de forma rápida, determinística e sem dependência de um banco de dados real (MongoDB).
+
+Para rodar a suíte de testes localmente:
+
+```
+npm run test
+```
