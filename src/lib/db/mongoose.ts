@@ -1,11 +1,5 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI!;
-
-if (!MONGODB_URI) {
-    throw new Error('Por favor, defina a variável de ambiente "MONGODB_URI" dentro do arquivo ".env.local"');
-}
-
 // Interface para o cache global da conexão com o banco
 interface MongooseCache {
     conn: typeof mongoose | null;
@@ -23,6 +17,18 @@ if (!cached) {
 }
 
 export async function connectToDatabase() {
+    const MONGODB_URI = process.env.MONGODB_URI!;
+
+    if (!MONGODB_URI) {
+
+        if (process.env.NODE_ENV === "test") {
+            console.warn("Aviso: MONGODB_URI não definida no ambiente de testes.");
+            return null;
+        }
+
+        throw new Error('Por favor, defina a variável de ambiente "MONGODB_URI" dentro do arquivo ".env.local"');
+    }
+
     if (cached.conn) {
         return cached.conn;
     }
