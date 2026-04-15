@@ -252,8 +252,8 @@ export default function ProdutosPage() {
                             <div className="flex flex-col gap-2 md:hidden">
                                 {data.data.map((produto) => (
                                     <Link
-                                        key={produto._id}
-                                        href={`/produtos/${produto._id}/editar`}
+                                        key={produto.id}
+                                        href={`/produtos/${produto.id}/editar`}
                                         className="group bg-surface border border-border rounded-xl p-4 flex items-center gap-4 hover:border-brand-border hover:shadow-sm active:scale-[0.99] transition-all"
                                     >
                                         <ProductThumbnail url={produto.urlImagem} descricao={produto.descricao} />
@@ -328,7 +328,7 @@ export default function ProdutosPage() {
                                     <tbody className="divide-y divide-border-subtle">
                                         {data.data.map((produto) => (
                                             <tr
-                                                key={produto._id}
+                                                key={produto.id}
                                                 className="group hover:bg-brand-muted transition-colors"
                                             >
                                                 {/* Thumbnail */}
@@ -375,7 +375,7 @@ export default function ProdutosPage() {
                                                 {/* Ação */}
                                                 <td className="px-4 py-3 text-center">
                                                     <Link
-                                                        href={`/produtos/${produto._id}/editar`}
+                                                        href={`/produtos/${produto.id}/editar`}
                                                         title={`Editar: ${produto.descricao}`}
                                                         className="inline-flex items-center gap-1.5 text-xs font-medium text-secondary hover:text-brand bg-subtle hover:bg-brand-muted border border-border hover:border-brand-border px-3 py-1.5 rounded-lg transition-all"
                                                     >
