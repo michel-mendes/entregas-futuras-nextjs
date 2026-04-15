@@ -1,41 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { produtoService } from '@/modules/produto/produto.service';
 import { CreateProdutoDTO, ListarProdutosDTO } from '@/modules/produto/produto.dto';
-import { z } from 'zod';
+import { apiWrapper, sendSuccess } from '@/lib/api/route-wrapper';
 
-export async function POST(req: NextRequest) {
-    try {
-        const body = await req.json();
+export const POST = apiWrapper(async (req: NextRequest) => {
+    const body = await req.json();
 
-        // Validação via DTO. Se falhar, joga o erro capturado no catch
-        const dadosValidados = CreateProdutoDTO.parse(body);
+    // Se a validação zod falhar o apiWrapper devolve 400
+    const dadosValidados = CreateProdutoDTO.parse(body);
 
-        // Passa os dados limpos para o Service
-        const novoProduto = await produtoService.criarProduto(dadosValidados);
+    // Se a validação extra do serviço falhar (SKU que já existe por exemplo), o service joga o AppError e o apiWrapper devolve 409
+    const novoProduto = await produtoService.criarProduto(dadosValidados);
 
-        return NextResponse.json(novoProduto, { status: 201 });
-    } catch (error: any) {
-        if (error instanceof z.ZodError) {
-            return NextResponse.json({ erro: "Dados inválidos", detalhes: error.issues }, { status: 400 });
-        }
-        // Erros de regra de negócio (ex: SKU duplicado) vindos do Service
-        return NextResponse.json({ erro: error.message }, { status: 409 });
-    }
-}
+    return sendSuccess(novoProduto, 201);
+});
 
-export async function GET(req: NextRequest) {
-    try {
-        // Extrai os query params da URL (?page=1&limit=20)
-        const { searchParams } = new URL(req.url);
-        const params = Object.fromEntries(searchParams.entries());
+export const GET = apiWrapper(async (req: NextRequest) => {
+    const { searchParams } = new URL(req.url);
+    const params = Object.fromEntries(searchParams.entries());
 
-        // Valida e aplica os padrões (defaults) configurados no DTO
-        const parametrosValidados = ListarProdutosDTO.parse(params);
+    // Se a validação do zod falhar o apiWrapper resolve
+    const parametrosValidados = ListarProdutosDTO.parse(params);
 
-        const resultadoPaginado = await produtoService.listarProdutos(parametrosValidados);
+    const resultadoPaginado = await produtoService.listarProdutos(parametrosValidados);
 
-        return NextResponse.json(resultadoPaginado, { status: 200 });
-    } catch (error: any) {
-        return NextResponse.json({ erro: "Erro ao buscar produtos" }, { status: 500 });
-    }
-}
+    // Separar os dados (array) dos metadados (paginação) para o frontend receber um JSON limpo.
+    return sendSuccess(resultadoPaginado.data, 200, resultadoPaginado.meta);
+});
