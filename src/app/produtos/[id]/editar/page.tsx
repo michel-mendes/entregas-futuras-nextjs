@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useParams } from 'next/navigation';
-import { UpdateProdutoDTO, UpdateProdutoInput } from '@/dtos/produto.dto';
-import { CategoriaProduto } from '@/types/produto.types';
-import { produtosApi } from '@/services/api/produtos.api';
+import { UpdateProdutoDTO, UpdateProdutoInput } from '@/modules/produto/produto.dto';
+import { CategoriaProduto } from '@/modules/produto/produto.types';
+import { produtosApi } from '@/modules/produto/produtos.api';
 
 // ─── Ícones ───────────────────────────────────────────────────────────────────
 

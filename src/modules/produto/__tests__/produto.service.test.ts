@@ -1,9 +1,9 @@
-import { produtoService } from '@/services/produto.service';
-import { produtoRepository } from '@/repositories/produto.repository';
-import { CategoriaProduto, IProduto } from '@/types/produto.types';
+import { produtoService } from '@/modules/produto/produto.service';
+import { produtoRepository } from '@/modules/produto/produto.repository';
+import { CategoriaProduto, IProduto } from '@/modules/produto/produto.types';
 
 // Mock do repositório de produtos
-jest.mock('@/repositories/produto.repository');
+jest.mock('@/modules/produto/produto.repository');
 
 describe('ProdutoService', () => {
 

@@ -1,7 +1,7 @@
 import { connectToDatabase } from '@/lib/db/mongoose';
-import { Produto } from '@/models/produto.model';
-import { IProduto } from '@/types/produto.types';
-import { CreateProdutoInput, ListarProdutosInput } from '@/dtos/produto.dto';
+import { Produto } from '@/modules/produto/produto.model';
+import { IProduto } from '@/modules/produto/produto.types';
+import { CreateProdutoInput, ListarProdutosInput } from '@/modules/produto/produto.dto';
 
 export class ProdutoRepository {
 

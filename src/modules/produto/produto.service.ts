@@ -1,7 +1,7 @@
-import { produtoRepository } from '@/repositories/produto.repository';
-import { CreateProdutoInput, ListarProdutosInput, UpdateProdutoInput } from '@/dtos/produto.dto';
+import { produtoRepository } from '@/modules/produto/produto.repository';
+import { CreateProdutoInput, ListarProdutosInput, UpdateProdutoInput } from '@/modules/produto/produto.dto';
 import { PaginatedResponse } from '@/types/pagination.types';
-import { IProduto } from '@/types/produto.types';
+import { IProduto } from '@/modules/produto/produto.types';
 
 export class ProdutoService {
 

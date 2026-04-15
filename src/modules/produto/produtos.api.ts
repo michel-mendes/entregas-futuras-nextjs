@@ -1,6 +1,6 @@
-import { IProduto } from '@/types/produto.types';
+import { IProduto } from '@/modules/produto/produto.types';
 import { PaginatedResponse } from '@/types/pagination.types';
-import { CreateProdutoInput, UpdateProdutoInput } from '@/dtos/produto.dto';
+import { CreateProdutoInput, UpdateProdutoInput } from '@/modules/produto/produto.dto';
 
 const BASE_URL = '/api/produtos';
 

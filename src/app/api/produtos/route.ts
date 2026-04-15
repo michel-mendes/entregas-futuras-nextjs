@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { produtoService } from '@/services/produto.service';
-import { CreateProdutoDTO, ListarProdutosDTO } from '@/dtos/produto.dto';
+import { produtoService } from '@/modules/produto/produto.service';
+import { CreateProdutoDTO, ListarProdutosDTO } from '@/modules/produto/produto.dto';
 import { z } from 'zod';
 
 export async function POST(req: NextRequest) {

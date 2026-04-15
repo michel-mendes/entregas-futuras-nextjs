@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CategoriaProduto } from '@/types/produto.types';
+import { CategoriaProduto } from '@/modules/produto/produto.types';
 
 const ProdutoBaseSchema = z.object({
     codigoSKU: z.string().min(1, "SKU / código de barras é obrigatório"),

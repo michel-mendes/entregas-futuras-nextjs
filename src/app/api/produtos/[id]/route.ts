@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { produtoService } from '@/services/produto.service';
-import { UpdateProdutoDTO } from '@/dtos/produto.dto';
+import { produtoService } from '@/modules/produto/produto.service';
+import { UpdateProdutoDTO } from '@/modules/produto/produto.dto';
 import { z } from 'zod';
 
 interface RouteParams { id: string }

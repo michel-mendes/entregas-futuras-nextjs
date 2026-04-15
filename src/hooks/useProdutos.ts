@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { produtosApi } from '@/services/api/produtos.api';
-import { IProduto } from '@/types/produto.types';
+import { produtosApi } from '@/modules/produto/produtos.api';
+import { IProduto } from '@/modules/produto/produto.types';
 import { PaginatedResponse } from '@/types/pagination.types';
 
 export function useProdutos(limiteInicial = 20) {
