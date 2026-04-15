@@ -2,15 +2,17 @@ import { produtoRepository } from '@/modules/produto/produto.repository';
 import { CreateProdutoInput, ListarProdutosInput, UpdateProdutoInput } from '@/modules/produto/produto.dto';
 import { PaginatedResponse } from '@/types/pagination.types';
 import { IProduto } from '@/modules/produto/produto.types';
+import { AppError } from '@/lib/errors/AppError';
+import { ProdutoMapper } from './produto.mapper';
 
 export class ProdutoService {
 
     async buscarProdutoPorId(id: string) {
         const produto = await produtoRepository.findById(id);
 
-        if (!produto) throw new Error("Produto não encontrado.");
+        if (!produto) throw AppError.NotFound("Produto não encontrado")
 
-        return produto;
+        return ProdutoMapper.toHttp(produto);
     }
 
     async listarProdutos(params: ListarProdutosInput): Promise<PaginatedResponse<IProduto>> {
@@ -19,7 +21,7 @@ export class ProdutoService {
         const totalPaginas = Math.ceil(totalRegistros / params.limit);
 
         return {
-            data: dados,
+            data: ProdutoMapper.toHttpArray(dados),
             meta: {
                 totalRegistros,
                 totalPaginas,
@@ -35,26 +37,32 @@ export class ProdutoService {
         const produtoExistente = await produtoRepository.findBySKU(data.codigoSKU);
 
         if (produtoExistente) {
-            throw new Error(`O SKU ${data.codigoSKU} já está cadastrado no sistema.`);
+            throw AppError.Conflict(`O SKU ${data.codigoSKU} já está cadastrado no sistema.`)
         }
 
-        return produtoRepository.create(data);
+        const produtoCriado = await produtoRepository.create(data);
+
+        return ProdutoMapper.toHttp(produtoCriado);
     }
 
     async atualizarProduto(id: string, data: UpdateProdutoInput) {
         const produtoExistente = await produtoRepository.findById(id);
 
-        if (!produtoExistente) throw new Error("Produto não encontrado para atualização.");
+        if (!produtoExistente) throw AppError.NotFound("Produto não encontrado para atualização")
 
-        return produtoRepository.update(id, data);
+        const produtoAtualizado = await produtoRepository.update(id, data);
+
+        return ProdutoMapper.toHttp(produtoAtualizado);
     }
 
     async desativarProduto(id: string) {
         const produtoExistente = await produtoRepository.findById(id);
 
-        if (!produtoExistente) throw new Error("Produto não encontrado.");
+        if (!produtoExistente) throw AppError.NotFound("Produto não encontrado")
 
-        return produtoRepository.softDelete(id);
+        const produtoDesativado = await produtoRepository.softDelete(id)
+
+        return ProdutoMapper.toHttp(produtoDesativado);
     }
 }
 

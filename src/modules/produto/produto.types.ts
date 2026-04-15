@@ -7,7 +7,7 @@ export enum CategoriaProduto {
 }
 
 export interface IProduto {
-    _id?: string;
+    id: string;
     codigoSKU: string; // Código do produto utilizado no sistema legado, pode-se referir à barras ou código de barras
     descricao: string;
     urlImagem?: string | undefined;
