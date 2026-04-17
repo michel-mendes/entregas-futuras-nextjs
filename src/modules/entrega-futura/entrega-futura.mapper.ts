@@ -6,7 +6,7 @@ export class EntregaFuturaMapper {
     static mapearParaResponseDTO(entrega: IEntregaFutura): EntregaFuturaResponseDTO {
 
         const entregaMapeada = {
-            id: entrega._id.toString(),
+            id: entrega._id!.toString(),
             cliente: entrega.cliente,
             enderecoEntrega: `${entrega.enderecoEntrega.logradouro}, ${entrega.enderecoEntrega.numero} - ${entrega.enderecoEntrega.bairro}, ${entrega.enderecoEntrega.cidade}/${entrega.enderecoEntrega.uf}`,
             status: entrega.status,

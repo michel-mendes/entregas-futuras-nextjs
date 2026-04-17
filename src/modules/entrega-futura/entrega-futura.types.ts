@@ -1,4 +1,4 @@
-import { Types, Document } from 'mongoose';
+import { Types, Document, ObjectId } from 'mongoose';
 
 export enum StatusEntrega {
     PENDENTE = 'PENDENTE',
@@ -15,7 +15,8 @@ export interface IItemEntregaFutura {
     quantidadeEntregue: number;
 }
 
-export interface IEntregaFutura extends Document {
+export interface IEntregaFutura {
+    _id?: string,
     cliente: {
         nome: string;
         documento: string; // CPF ou CNPJ

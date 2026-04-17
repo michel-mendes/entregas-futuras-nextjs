@@ -1,9 +1,11 @@
 import { EntregaFuturaRepository } from './entrega-futura.repository';
 import { CreateEntregaFuturaDTO, UpdateItemEntregaDTO, EntregaFuturaResponseDTO } from './entrega-futura.dto';
-import { StatusEntrega } from './entrega-futura.types';
+import { IEntregaFutura, StatusEntrega } from './entrega-futura.types';
 import { AppError } from '@/lib/errors/AppError';
 import { Types } from 'mongoose';
 import { EntregaFuturaMapper } from './entrega-futura.mapper';
+import { ListarEntregasQueryInput } from './entrega-futura.validator';
+import { PaginatedResponse } from '@/types/pagination.types';
 
 export class EntregaFuturaService {
     private readonly repository: EntregaFuturaRepository;
@@ -13,7 +15,7 @@ export class EntregaFuturaService {
     }
 
     async criarEntrega(dto: CreateEntregaFuturaDTO): Promise<EntregaFuturaResponseDTO> {
-        
+
         // Valida se a entrega possui itens, senão retona erro
         if (!dto.itens || dto.itens.length === 0) {
             throw AppError.BadRequest('Uma entrega futura deve conter pelo menos um item.');
@@ -53,6 +55,46 @@ export class EntregaFuturaService {
             throw AppError.NotFound('Entrega futura não encontrada.');
         }
         return EntregaFuturaMapper.mapearParaResponseDTO(entrega);
+    }
+
+    async listarEntregas(query: ListarEntregasQueryInput): Promise<PaginatedResponse<EntregaFuturaResponseDTO>> {
+        const { pagina, limite, status, documentoCliente, nomeCliente } = query;
+
+        // definir filtros do Mongoose
+        const filtros: Record<string, any> = {};
+
+        if (status) {
+            filtros.status = status;
+        }
+
+        if (documentoCliente) {
+            // Buscar valor exato
+            filtros['cliente.documento'] = documentoCliente;
+        }
+
+        if (nomeCliente) {
+            // Busca parcial e case insensitive - tipo LIKE em SQL
+            filtros['cliente.nome'] = { $regex: new RegExp(nomeCliente, 'i') };
+        }
+
+        // Faz a busca
+        const { dados, total } = await this.repository.listarPaginado(pagina, limite, filtros);
+
+        // calcular dados de paginação
+        const totalPaginas = Math.ceil(total / limite);
+
+        // formatar a saída para padronização e segurança no frontend
+        return {
+            data: dados.map(entrega => EntregaFuturaMapper.mapearParaResponseDTO(entrega)),
+            meta: {
+                totalRegistros: total,
+                paginaAtual: pagina,
+                itensPorPagina: limite,
+                totalPaginas,
+                temProximaPagina: pagina < totalPaginas,
+                temPaginaAnterior: pagina > 1,
+            }
+        };
     }
 
     // Lógica de baixa parcial de prodtuo

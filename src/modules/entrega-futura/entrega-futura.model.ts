@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, Model } from 'mongoose';
 import { IEntregaFutura, IItemEntregaFutura, StatusEntrega } from './entrega-futura.types';
 
 const ItemEntregaFuturaSchema = new Schema<IItemEntregaFutura>({
@@ -68,4 +68,4 @@ EntregaFuturaSchema.virtual('progressoPercentual').get(function () {
     return Number(((totalEntregue / totalComprado) * 100).toFixed(2));
 });
 
-export const EntregaFutura = models.EntregaFutura || model<IEntregaFutura>('EntregaFutura', EntregaFuturaSchema);
+export const EntregaFutura: Model<IEntregaFutura> = mongoose.models.EntregaFutura || mongoose.model<IEntregaFutura>('EntregaFutura', EntregaFuturaSchema);
