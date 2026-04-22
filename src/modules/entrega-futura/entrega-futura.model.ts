@@ -32,7 +32,10 @@ const EntregaFuturaSchema = new Schema<IEntregaFutura>(
         itens: [ItemEntregaFuturaSchema],
     },
     {
-        timestamps: true,
+        timestamps: {
+            createdAt: "dataCriacao",
+            updatedAt: "dataAtualizacao"
+        },
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
     }
@@ -42,7 +45,7 @@ const EntregaFuturaSchema = new Schema<IEntregaFutura>(
 EntregaFuturaSchema.index({ 'cliente.nome': 1 })
 EntregaFuturaSchema.index({ 'cliente.documento': 1 });
 EntregaFuturaSchema.index({ status: 1 });
-EntregaFuturaSchema.index({ createdAt: -1 });
+EntregaFuturaSchema.index({ dataCriacao: -1 });
 
 
 // v--- VIRTUALS PARA CÁLCULO DE PROGRESSO ---v

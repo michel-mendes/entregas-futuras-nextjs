@@ -12,7 +12,7 @@ export class EntregaFuturaRepository {
 
     async criar(dados: Partial<IEntregaFutura>): Promise<IEntregaFutura> {
         const novaEntrega = new this.model(dados);
-        return await novaEntrega.save();
+        return (await novaEntrega.save()).toObject();
     }
 
     async buscarPorId(id: string): Promise<IEntregaFutura | null> {

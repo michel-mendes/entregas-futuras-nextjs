@@ -5,8 +5,11 @@ export class EntregaFuturaMapper {
 
     static mapearParaResponseDTO(entrega: IEntregaFutura): EntregaFuturaResponseDTO {
 
+        const id = (typeof entrega._id !== "string") ? entrega._id.toString() : entrega._id
+        const dataCriacao = (entrega.dataCriacao && typeof entrega.dataCriacao !== "string") ? entrega.dataCriacao.toString() : entrega.dataCriacao
+
         const entregaMapeada = {
-            id: entrega._id!.toString(),
+            id,
             cliente: entrega.cliente,
             enderecoEntrega: `${entrega.enderecoEntrega.logradouro}, ${entrega.enderecoEntrega.numero} - ${entrega.enderecoEntrega.bairro}, ${entrega.enderecoEntrega.cidade}/${entrega.enderecoEntrega.uf}`,
             status: entrega.status,
@@ -22,7 +25,7 @@ export class EntregaFuturaMapper {
                 produtoId: item.produtoId.toString(),
                 pendente: item.quantidadeComprada - item.quantidadeEntregue,
             })),
-            dataCriacao: entrega.dataCriacao.toISOString(),
+            dataCriacao,
         };
 
         return entregaMapeada;

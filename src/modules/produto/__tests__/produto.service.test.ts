@@ -1,6 +1,7 @@
 import { produtoService } from '@/modules/produto/produto.service';
 import { produtoRepository } from '@/modules/produto/produto.repository';
 import { CategoriaProduto, IProduto } from '@/modules/produto/produto.types';
+import { CreateProdutoInput, UpdateProdutoInput } from '../produto.dto';
 
 // Mock do repositório de produtos
 jest.mock('@/modules/produto/produto.repository');
@@ -17,7 +18,7 @@ describe('ProdutoService', () => {
         it('deve criar um produto com sucesso se o SKU não existir', async () => {
             // Dados do novo produto
             const codigoSKU = '7896675432'
-            const input: IProduto = {
+            const input: CreateProdutoInput = {
                 codigoSKU,
                 descricao: 'Porcelanato Acetinado',
                 precoVista: 100,
@@ -32,7 +33,7 @@ describe('ProdutoService', () => {
             (produtoRepository.findBySKU as jest.Mock).mockResolvedValue(null);
 
             // Simula que o produto foi criado com sucesso
-            const produtoCriadoMock = { _id: 'mock-id-123', ...input, createdAt: new Date(), updatedAt: new Date() };
+            const produtoCriadoMock = { ...input, createdAt: new Date(), updatedAt: new Date() };
             (produtoRepository.create as jest.Mock).mockResolvedValue(produtoCriadoMock);
 
             const resultado = await produtoService.criarProduto(input);
@@ -49,7 +50,7 @@ describe('ProdutoService', () => {
         it('deve lançar um erro se tentar criar um produto com SKU já existente', async () => {
             // Dados do produto novo produtuo
             const codigoSKU = "SKU_DUPLICADO";
-            const input: IProduto = {
+            const input: CreateProdutoInput = {
                 codigoSKU,
                 descricao: 'Argamassa',
                 precoVista: 20,
@@ -76,8 +77,7 @@ describe('ProdutoService', () => {
         it("deve lançar um erro ao tentar atualizar um produto inexistente", async () => {
             // Dados do produto inexistente (id 9999)
             const idProduto = "9999";
-            const input: IProduto = {
-                codigoSKU: "SKU_SISTEMA",
+            const input: UpdateProdutoInput = {
                 descricao: "Porcelanato Teste",
                 precoPrazo: 20,
                 precoVista: 10,

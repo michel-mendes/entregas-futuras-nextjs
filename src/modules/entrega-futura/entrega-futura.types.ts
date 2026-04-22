@@ -1,4 +1,4 @@
-import { Types, Document, ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 
 export enum StatusEntrega {
     PENDENTE = 'PENDENTE',
@@ -8,7 +8,7 @@ export enum StatusEntrega {
 }
 
 export interface IItemEntregaFutura {
-    _id?: string;
+    _id?: Types.ObjectId;
     produtoId: Types.ObjectId;
     descricao: string; // campo imutável para consistência de dados e histórico correto
     quantidadeComprada: number;
@@ -16,7 +16,7 @@ export interface IItemEntregaFutura {
 }
 
 export interface IEntregaFutura {
-    _id?: string,
+    _id: Types.ObjectId,
     cliente: {
         nome: string;
         documento: string; // CPF ou CNPJ
