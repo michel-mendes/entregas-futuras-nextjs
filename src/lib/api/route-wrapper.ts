@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AppError } from '@/lib/errors/AppError';
-import { ApiResponse } from '@/types/api-response.types';
+import { ApiMetadata, ApiResponse } from '@/types/api-response.types';
 import { z } from 'zod';
 
 type RouteHandler = (req: NextRequest, context?: any) => Promise<NextResponse | void> | NextResponse | void;
@@ -73,7 +73,7 @@ export function apiWrapper(handler: RouteHandler) {
 
 }
 
-export function sendSuccess<T>(data: T, status: number = 200, meta?: any) {
+export function sendSuccess<T>(data: T, status: number = 200, meta?: ApiMetadata) {
     const response: ApiResponse<T> = {
         success: true,
         data,
