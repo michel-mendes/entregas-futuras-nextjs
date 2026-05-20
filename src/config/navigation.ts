@@ -47,7 +47,7 @@ export const navigationConfig: NavGroup[] = [
         group: 'Operações',
         items: [
             // Em desenvolvimento
-            // { name: 'Entregas Futuras', href: '/entregas-futuras', icon: CalendarClock },
+            { name: 'Entregas Futuras', href: '/entregas-futuras', icon: CalendarClock },
             // { name: 'Romaneios', href: '/romaneios', icon: Truck },
             // { name: 'Pedidos', href: '/pedidos', icon: ShoppingCart },
         ],
