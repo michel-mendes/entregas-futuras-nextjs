@@ -1,6 +1,6 @@
 import { EntregaFuturaRepository } from './entrega-futura.repository';
 import { CreateEntregaFuturaDTO, UpdateItemEntregaDTO, EntregaFuturaResponseDTO } from './entrega-futura.dto';
-import { IEntregaFutura, StatusEntrega } from './entrega-futura.types';
+import { StatusEntrega } from './entrega-futura.types';
 import { AppError } from '@/lib/errors/AppError';
 import { Types } from 'mongoose';
 import { EntregaFuturaMapper } from './entrega-futura.mapper';
@@ -69,14 +69,13 @@ export class EntregaFuturaService {
 
         if (documentoCliente) {
             // Buscar valor exato
-            filtros['cliente.documento'] = documentoCliente;
+            filtros['cliente.documento'] = { $regex: new RegExp(documentoCliente) };
         }
 
         if (nomeCliente) {
             // Busca parcial e case insensitive - tipo LIKE em SQL
             filtros['cliente.nome'] = { $regex: new RegExp(nomeCliente, 'i') };
         }
-
         // Faz a busca
         const { dados, total } = await this.repository.listarPaginado(pagina, limite, filtros);
 

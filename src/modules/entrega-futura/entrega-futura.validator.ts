@@ -31,7 +31,6 @@ const itemCriacaoSchema = z.object({
     produtoId: z.string().regex(objectIdRegex, 'ID de produto inválido ou corrompido'),
     descricao: z.string().min(3, 'A descrição do produto é obrigatória'),
     quantidadeComprada: z.number().min(0.001, "Quantidade é obrigatória")
-        .int('A quantidade deve ser um número inteiro')
         .positive('A quantidade comprada deve ser maior que zero'),
 });
 
@@ -54,12 +53,20 @@ export const registrarBaixaParcialSchema = z.object({
 
 // Schema de busca / listagme ---v
 export const listarEntregasQuerySchema = z.object({
-    // coerce converte strings da URL (ex: ?pagina=2) para numbers automaticamente
-    pagina: z.coerce.number().int().positive().default(1),
-    limite: z.coerce.number().int().positive().max(100, 'Limite máximo de 100 itens por página').default(20),
-    status: z.enum(StatusEntrega, 'Status de entrega inválido').optional(),
-    nomeCliente: z.string().optional(),
-    documentoCliente: z.string().transform(doc => doc.replace(/\D/g, '')).optional(),
+    // Coerce resolve a conversão de string da URL para number
+    pagina: z.coerce.number<number>().int().positive().default(1),
+    limite: z.coerce.number<number>().int().positive().max(100).default(20),
+    
+    // CORREÇÃO: Use nativeEnum se StatusEntrega for um enum TS
+    // Ou z.enum(Object.values(StatusEntrega) as [string, ...string[]])
+    status: z.enum(StatusEntrega).default(StatusEntrega.PENDENTE),
+    
+    nomeCliente: z.string().nullish(),
+    // nomeCliente: z.string().optional(),
+    
+    // CORREÇÃO: Opcional vem ANTES do transform para evitar erro com undefined
+    documentoCliente: z.string()
+        .transform(doc => doc ? doc.replace(/\D/g, '') : doc).nullish(),
 });
 
 
