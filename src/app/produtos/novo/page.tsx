@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { CreateProdutoDTO, CreateProdutoInput } from '@/modules/produto/produto.dto';
 import { CategoriaProduto } from '@/modules/produto/produto.types';
-import { produtosApi } from '@/modules/produto/produtos.api';
+import { produtosApi } from '@/modules/produto/produto.api';
 import { IconChevronLeft, IconInfo, IconPackagePlus, IconSave, IconSpinner } from '@/components/ui/Icons';
 import { INotification, NotificationBanner } from '@/components/ui/NotificationBanner';
 import { FormField } from '@/components/ui/FormField';

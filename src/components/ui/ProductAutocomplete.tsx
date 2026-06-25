@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { IProduto } from '@/modules/produto/produto.types';
-import { produtosApi } from '@/modules/produto/produtos.api';
+import { produtosApi } from '@/modules/produto/produto.api';
 
 interface ProductAutocompleteProps {
     onSelect: (produto: IProduto) => void;

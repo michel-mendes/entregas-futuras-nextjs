@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { produtosApi } from '@/modules/produto/produtos.api';
+import { produtosApi } from '@/modules/produto/produto.api';
 import { IProduto } from '@/modules/produto/produto.types';
 import { PaginatedResponse } from '@/types/pagination.types';
 

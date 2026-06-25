@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useParams } from 'next/navigation';
 import { UpdateProdutoDTO, UpdateProdutoInput } from '@/modules/produto/produto.dto';
 import { CategoriaProduto } from '@/modules/produto/produto.types';
-import { produtosApi } from '@/modules/produto/produtos.api';
+import { produtosApi } from '@/modules/produto/produto.api';
 
 // ─── Ícones ───────────────────────────────────────────────────────────────────
 
