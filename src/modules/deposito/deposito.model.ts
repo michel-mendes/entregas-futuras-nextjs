@@ -6,6 +6,7 @@ const DepositoSchema = new Schema<IDeposito>(
         nome: { type: String, required: true, trim: true, uppercase: true },
         setor: { type: String, trim: true, uppercase: true },
         ativo: { type: Boolean, default: true },
+        deletedAt: { type: Date, required: false },
     },
     {
         timestamps: true,

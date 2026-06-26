@@ -4,4 +4,5 @@ export interface IDeposito {
     ativo: boolean;
     createdAt: Date;
     updatedAt: Date;
+    deletedAt: Date;
 }
