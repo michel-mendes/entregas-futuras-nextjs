@@ -3,8 +3,8 @@ export interface LoteEntity {
     ativo: boolean;
     idProduto: string;
     idDeposito: string;
-    dataProducao: Date;
-    numeroLote: string;
+    dataProducao?: Date;
+    numeroLote?: string;
     bitola: number;
     tonalidade: number;
     quantidadeInicial: number;
@@ -13,5 +13,5 @@ export interface LoteEntity {
     localizacaoDetalhada?: string;
     observacoes?: string;
     createdAt: Date;
-    updatedAt: Date;
+    updatedAt?: Date;
 }
