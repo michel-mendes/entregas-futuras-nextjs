@@ -7,8 +7,8 @@ export interface ILote {
     idDeposito: Types.ObjectId;
 
     // Especificação do lote
-    dataProducao: Date;
-    codigoLote: string;
+    dataProducao?: Date;
+    numeroLote?: string;
     bitola: number;
     tonalidade: number;
 
@@ -18,8 +18,8 @@ export interface ILote {
     quantidadeReservada: number;    // Quantidade reservada para entrega
 
     // Dados adicionais
-    localizacaoDetalhada: string;   // Complemento para localização, ex: "Corredor 3", "Mesanino 2"...
-    observacoes: string;            // Utilizado para anotações extras, ex: "Caixa rasgada", "Ponta de estoque"...
+    localizacaoDetalhada?: string;   // Complemento para localização, ex: "Corredor 3", "Mesanino 2"...
+    observacoes?: string;            // Utilizado para anotações extras, ex: "Caixa rasgada", "Ponta de estoque"...
 
     createdAt: Date;
     updatedAt: Date;
