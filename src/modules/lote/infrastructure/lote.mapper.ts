@@ -1,4 +1,4 @@
-import { LoteEntity } from "./lote.entity";
+import { LoteEntity } from "../domain/lote.entity";
 
 export class LoteMapper {
     /**

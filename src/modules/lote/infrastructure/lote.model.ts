@@ -1,5 +1,5 @@
 import { Schema, model, models, Model } from 'mongoose';
-import { ILote } from './lote.types';
+import { ILote } from '../lote.types';
 
 const LoteSchema = new Schema<ILote>(
     {

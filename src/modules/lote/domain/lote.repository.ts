@@ -1,4 +1,4 @@
-import { CriarLoteDTO } from "./lote.dto";
+import { CriarLoteDTO } from "../application/lote.dto";
 import { LoteEntity } from "./lote.entity";
 
 export interface ILoteRepository {

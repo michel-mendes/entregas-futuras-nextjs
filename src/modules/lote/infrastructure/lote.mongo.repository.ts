@@ -1,9 +1,9 @@
 import { connectToDatabase } from "@/lib/db/mongoose";
-import { ILoteRepository } from "./lote.domain.interface.repository";
-import { LoteEntity } from "./lote.entity";
+import { ILoteRepository } from "../domain/lote.repository";
+import { LoteEntity } from "../domain/lote.entity";
 import { Lote } from "./lote.model";
 import { LoteMapper } from "./lote.mapper";
-import { CriarLoteDTO } from "./lote.dto";
+import { CriarLoteDTO } from "../application/lote.dto";
 
 export class MongoLoteRepository implements ILoteRepository {
 
