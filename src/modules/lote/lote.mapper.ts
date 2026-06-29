@@ -9,7 +9,7 @@ export class LoteMapper {
             throw new Error("Falha no mapeamento do modelo 'Lote': dados do lote nulos ou indefinidos.");
         }
 
-        return {
+        const lote = new LoteEntity({
             id: raw._id ? raw._id.toString() : raw.id?.toString(),
             ativo: Boolean(raw.ativo),
 
@@ -32,7 +32,9 @@ export class LoteMapper {
 
             createdAt: raw.createdAt,
             updatedAt: raw.updatedAt
-        };
+        })
+
+        return lote;
     }
 
 }
