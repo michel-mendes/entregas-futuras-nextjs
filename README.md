@@ -7,7 +7,9 @@
 
 A operação utilizava um sistema legado (desenvolvido em Delphi + MSSQL) focado exclusivamente no balcão de vendas. Este sistema apresentava falhas críticas na gestão física do estoque, impossibilitando a escala da operação:
 
-- **Ausência de Controle de Lotes**: Pisos e porcelanatos exigem rastreio rigoroso de lote/tonalidade. Misturar lotes gera devoluções e prejuízos.
+- **Ausência de Controle de Lotes**: Pisos e porcelanatos exigem rastreio rigoroso de lote/tonalidade.
+
+- **Mitigação de Riscos (RiskOps)**: A ausência de rastreamento de lotes gerava devoluções sistêmicas e prejuízo financeiro direto. O novo sistema atua bloqueando falhas na expedição e protegendo o fluxo de caixa.
 
 - **Entregas Futuras e Parciais**: O sistema legado não gerenciava compras onde o cliente retira os materiais fracionados ao longo de meses de obra.
 
@@ -27,7 +29,7 @@ O projeto foge do acoplamento padrão do Next.js (Server Actions misturadas com 
 
 O fluxo de dados obedece estritamente a 5 camadas:
 
-- **Controller (API Routes)**: Ponto de entrada. Recebe a requisição HTTP e mapeia a resposta, sem regras de negócio.
+- **Controller (APIs RESTful [Next.js API Routes])**: Ponto de entrada. Recebe a requisição HTTP e mapeia a resposta, sem regras de negócio.
 
 - **DTO (Data Transfer Object)**: Validação rígida de entrada e saída utilizando Zod. Garante que payloads malformados nunca cheguem ao domínio da aplicação.
 
@@ -36,6 +38,25 @@ O fluxo de dados obedece estritamente a 5 camadas:
 - **Repository**: O tradutor de dados. Única camada autorizada a construir queries (Mongoose / Sequelize), garantindo que o Service seja agnóstico a banco de dados.
 
 - **Model**: Definição dos esquemas e tipagens.
+
+---
+
+## ✨ Boas Práticas
+Aplicação prática de princípios SOLID (S = Responsabilidade única e D = Inversão de dependência) para garantir testabilidade da camada de Service.
+
+## 🧪 Testes e Qualidade
+
+Este projeto adota uma abordagem rigorosa para testes de software, focando no isolamento de regras de negócio.
+
+- **Framework:** Jest + TS-Jest
+- **Estratégia:** Testes Unitários isolados na camada de **Service** (Core da aplicação).
+- **Mocking:** O acesso a dados (Repository) e validações de rede são "mockados" para garantir que os testes rodem de forma rápida, determinística e sem dependência de um banco de dados real (MongoDB).
+
+Para rodar a suíte de testes localmente:
+
+```
+npm run test
+```
 
 ---
 
@@ -51,10 +72,6 @@ O fluxo de dados obedece estritamente a 5 camadas:
 - ✅ **Gestão Base de Produtos**: CRUD completo com Soft Delete (Inativação para manter integridade histórica de notas fiscais).
 
 - ✅ **Validação Condicional**: Exigência de peso/m² variável de acordo com a categoria logística do material.
-
-- [ ] *Gestão de Lotes*: Controle de saldo, tonalidade e mapeamento físico (Depósito/Rua/Palete). **(Em desenvolvimento)**
-
-- [ ] Romaneios e Entregas Parciais: Orquestração de saídas fracionadas de estoque. **(Em desenvolvimento)**
 
 ## 💻 Como rodar o projeto localmente
 ### 1. Clone o repositório
@@ -78,18 +95,3 @@ npm run dev
 ```
 
 Acesse http://localhost:3000 para visualizar a aplicação.
-
-
-## 🧪 Testes e Qualidade
-
-Este projeto adota uma abordagem rigorosa para testes de software, focando no isolamento de regras de negócio.
-
-- **Framework:** Jest + TS-Jest
-- **Estratégia:** Testes Unitários isolados na camada de **Service** (Core da aplicação).
-- **Mocking:** O acesso a dados (Repository) e validações de rede são "mockados" para garantir que os testes rodem de forma rápida, determinística e sem dependência de um banco de dados real (MongoDB).
-
-Para rodar a suíte de testes localmente:
-
-```
-npm run test
-```
