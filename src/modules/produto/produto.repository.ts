@@ -5,21 +5,15 @@ import { CreateProdutoInput, ListarProdutosInput } from '@/modules/produto/produ
 
 export class ProdutoRepository {
 
-    async findById(id: string) {
-        await connectToDatabase();
-        
+    async findById(id: string) {   
         return Produto.findById(id).lean();
     }
 
     async findBySKU(sku: string): Promise<IProduto | null> {
-        await connectToDatabase();
-
         return Produto.findOne({ codigoSKU: sku }).lean();
     }
 
     async findAllPaginated(params: ListarProdutosInput) {
-        await connectToDatabase();
-
         const { page, limit, termoBusca, apenasAtivos } = params;
 
         const query: Record<string, any> = {};
@@ -59,20 +53,14 @@ export class ProdutoRepository {
     }
 
     async create(data: CreateProdutoInput): Promise<IProduto> {
-        await connectToDatabase();
-
         return Produto.create(data);
     }
 
     async update(id: string, data: Partial<IProduto>) {
-        await connectToDatabase();
-
         return Produto.findByIdAndUpdate(id, data, { new: true, runValidators: true }).lean();
     }
 
     async softDelete(id: string) {
-        await connectToDatabase();
-
         return Produto.findByIdAndUpdate(id, { ativo: false }, { new: true }).lean();
     }
 }

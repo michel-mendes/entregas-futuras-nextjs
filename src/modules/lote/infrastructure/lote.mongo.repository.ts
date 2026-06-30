@@ -8,8 +8,6 @@ import { CriarLoteDTO } from "../application/lote.dto";
 export class MongoLoteRepository implements ILoteRepository {
 
     async buscarPorId(id: string): Promise<LoteEntity | null> {
-        await connectToDatabase()
-
         const lote = await Lote.findById(id, { ativo: true }).lean().exec();
         if (!lote) return null
 
@@ -18,8 +16,6 @@ export class MongoLoteRepository implements ILoteRepository {
     }
 
     async buscarPorProduto(idProduto: string): Promise<LoteEntity[]> {
-        await connectToDatabase();
-
         const lotes = await Lote.find({ idProduto, ativo: true }).lean().exec();
         
         const lotesMapeados = lotes.map(lote => LoteMapper.toDomain(lote));
@@ -27,8 +23,6 @@ export class MongoLoteRepository implements ILoteRepository {
     }
 
     async buscarPorDeposito(idDeposito: string): Promise<LoteEntity[]> {
-        await connectToDatabase();
-
         const lotes = await Lote.find({ idDeposito, ativo: true }).lean().exec();
         
         const lotesMapeados = lotes.map(lote => LoteMapper.toDomain(lote));
@@ -36,8 +30,6 @@ export class MongoLoteRepository implements ILoteRepository {
     }
 
     async criar(dados: CriarLoteDTO): Promise<LoteEntity> {
-        await connectToDatabase();
-
         const dadosNovoLote: Partial<LoteEntity> = {
             ...dados,
             quantidadeAtual: dados.quantidadeInicial,
@@ -52,8 +44,6 @@ export class MongoLoteRepository implements ILoteRepository {
     }
 
     async atualizarSaldo(id: string, variacaoAtual: number, variacaoReservada: number): Promise<LoteEntity | null> {
-        await connectToDatabase();
-
         const loteAtualizado = await Lote.findByIdAndUpdate(id, {
             $inc: {
                 quantidadeAtual: variacaoAtual,

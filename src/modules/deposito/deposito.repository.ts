@@ -8,8 +8,6 @@ import { CreateDepositoDTO, UpdateDepositoDTO } from "./deposito.dto";
 export class MongoDepositoRepository implements IDepositoRepository {
 
     async localizarPorId(id: string): Promise<DepositoEntity | null> {
-        await connectToDatabase();
-
         const deposito = await Deposito.findById(id).lean().exec();
         if (!deposito) return null;
 
@@ -18,8 +16,6 @@ export class MongoDepositoRepository implements IDepositoRepository {
     }
 
     async listar(filtros: Partial<DepositoEntity> = {}): Promise<DepositoEntity[]> {
-        await connectToDatabase();
-
         const query = DepositoMapper.toDatabaseQuery(filtros);
         const depositos = await Deposito.find(query).lean().exec();
 
@@ -28,8 +24,6 @@ export class MongoDepositoRepository implements IDepositoRepository {
     }
 
     async criar(dados: CreateDepositoDTO): Promise<DepositoEntity> {
-        await connectToDatabase();
-
         const novoDeposito = new Deposito(dados);
         const depositoSalvo = await novoDeposito.save();
 
@@ -38,8 +32,6 @@ export class MongoDepositoRepository implements IDepositoRepository {
     }
 
     async atualizar(id: string, dados: Partial<UpdateDepositoDTO>): Promise<DepositoEntity | null> {
-        await connectToDatabase();
-
         const depositoAtualizado = await Deposito.findByIdAndUpdate(id, dados, { returnDocument: "after" }).lean().exec();
         if (!depositoAtualizado) return null;
 
@@ -48,8 +40,6 @@ export class MongoDepositoRepository implements IDepositoRepository {
     }
 
     async deletar(id: string): Promise<boolean> {
-        await connectToDatabase();
-
         const resultado = await Deposito.findByIdAndUpdate(id, { ativo: false, deletedAt: new Date(Date.now()) }).exec();
         return resultado !== null;
     }

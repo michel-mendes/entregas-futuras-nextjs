@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server';
-import { connectToDatabase } from '@/lib/db/mongoose';
 import { EntregaFuturaService } from '@/modules/entrega-futura/entrega-futura.service';
 import { criarEntregaFuturaSchema, listarEntregasQuerySchema } from '@/modules/entrega-futura/entrega-futura.validator';
 import { apiWrapper, sendSuccess } from '@/lib/api/route-wrapper';
@@ -8,8 +7,6 @@ const entregaService = new EntregaFuturaService();
 
 
 export const GET = apiWrapper(async (req: NextRequest) => {
-    // Estabelec conexão com o banco
-    await connectToDatabase()
 
     // extrai os parâmetros recebidos na rota
     const searchParams = Object.fromEntries(req.nextUrl.searchParams);
@@ -24,8 +21,6 @@ export const GET = apiWrapper(async (req: NextRequest) => {
 
 
 export const POST = apiWrapper(async (req: NextRequest) => {
-    // Estabelec conexão com o banco
-    await connectToDatabase()
 
     // extrai os dados da entrega
     const body = await req.json();

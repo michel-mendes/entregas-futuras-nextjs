@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AppError } from '@/lib/errors/AppError';
 import { ApiMetadata, ApiResponse } from '@/types/api-response.types';
+import { connectToDatabase } from '../db/mongoose';
 import { z } from 'zod';
 
 type RouteHandler = (req: NextRequest, context?: any) => Promise<NextResponse | void> | NextResponse | void;
@@ -9,6 +10,8 @@ export function apiWrapper(handler: RouteHandler) {
 
     return async (req: NextRequest, context?: any): Promise<NextResponse> => {
         try {
+            // Caso não esteja estabelecida garante conexão com o banco de dados
+            await connectToDatabase();
 
             // PASSO 1: Tenta executar a rota original
             const result = await handler(req, context);
