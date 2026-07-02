@@ -22,6 +22,7 @@ export class MongoLoteRepository implements ILoteRepository {
 
         return {
             dados: lotesMapeados,
+            totalPaginas,
             totalRegistros
         }
     }

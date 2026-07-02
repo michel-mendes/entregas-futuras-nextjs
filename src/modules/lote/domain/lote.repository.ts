@@ -8,6 +8,7 @@ export interface ListarLotesParams {
 
 export interface RespostaListarLotes {
     dados: LoteEntity[],
+    totalPaginas: number,
     totalRegistros: number
 };
 
