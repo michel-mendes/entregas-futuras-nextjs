@@ -1,11 +1,30 @@
-import { connectToDatabase } from "@/lib/db/mongoose";
-import { ILoteRepository } from "../domain/lote.repository";
+import { ILoteRepository, ListarLotesParams, RespostaListarLotes } from "../domain/lote.repository";
 import { LoteEntity } from "../domain/lote.entity";
 import { Lote } from "./lote.model";
 import { LoteMapper } from "./lote.mapper";
 import { CriarLoteDTO } from "../application/lote.dto";
 
 export class MongoLoteRepository implements ILoteRepository {
+
+    async listar({ limite, pagina }: ListarLotesParams): Promise<RespostaListarLotes> {
+        const skip = (pagina - 1) * limite;
+
+        // Filtro geral para busca
+        const filtro = { ativo: true };
+
+        const [lotes, totalRegistros] = await Promise.all([
+            Lote.find(filtro).sort({ createdAt: -1 }).skip(skip).limit(limite).lean().exec(),
+            Lote.countDocuments(filtro).exec()
+        ]);
+
+        const totalPaginas = Math.ceil(totalRegistros / limite);
+        const lotesMapeados = lotes.map(lote => LoteMapper.toDomain(lote));
+
+        return {
+            dados: lotesMapeados,
+            totalRegistros
+        }
+    }
 
     async buscarPorId(id: string): Promise<LoteEntity | null> {
         const lote = await Lote.findById(id, { ativo: true }).lean().exec();
@@ -17,14 +36,14 @@ export class MongoLoteRepository implements ILoteRepository {
 
     async buscarPorProduto(idProduto: string): Promise<LoteEntity[]> {
         const lotes = await Lote.find({ idProduto, ativo: true }).lean().exec();
-        
+
         const lotesMapeados = lotes.map(lote => LoteMapper.toDomain(lote));
         return lotesMapeados;
     }
 
     async buscarPorDeposito(idDeposito: string): Promise<LoteEntity[]> {
         const lotes = await Lote.find({ idDeposito, ativo: true }).lean().exec();
-        
+
         const lotesMapeados = lotes.map(lote => LoteMapper.toDomain(lote));
         return lotesMapeados;
     }
@@ -38,7 +57,7 @@ export class MongoLoteRepository implements ILoteRepository {
 
         const novoLote = new Lote(dadosNovoLote);
         const loteSalvo = await novoLote.save();
-        
+
         const loteMapeado = LoteMapper.toDomain(loteSalvo)
         return loteMapeado;
     }
