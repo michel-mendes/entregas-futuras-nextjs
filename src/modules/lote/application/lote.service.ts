@@ -1,8 +1,8 @@
 import { PaginatedResponse } from "@/types/pagination.types";
 import { ILoteRepository, ListarLotesParams } from "../domain/lote.repository";
 import { MongoLoteRepository } from "../infrastructure/lote.mongo.repository";
-import { ILote } from "../lote.types";
-import { LoteEntity } from "../domain/lote.entity";
+import { LotePresenter } from "./lote.presenter";
+import { LoteRespostaApiDTO } from "./lote.dto";
 
 export class LoteService {
     constructor(private readonly loteRepository: ILoteRepository) { }
@@ -10,15 +10,17 @@ export class LoteService {
     /**
      * Lista lotes com paginação e limite de resultados por página.
      */
-    async listarLotes({ limite, pagina }: ListarLotesParams): Promise<PaginatedResponse<LoteEntity>> {
+    async listarLotes({ limite, pagina }: ListarLotesParams): Promise<PaginatedResponse<LoteRespostaApiDTO>> {
         const parametrosValidados: ListarLotesParams = {
             limite: Math.max(1, limite),
             pagina: Math.max(1, pagina)
         };
         
         const resposta = await this.loteRepository.listar(parametrosValidados);
+        const lotesJson = resposta.dados.map(loteEntity => LotePresenter.toJSON(loteEntity))
+
         return {
-            data: resposta.dados,
+            data: lotesJson,
             meta: {
                 totalPaginas: resposta.totalPaginas,
                 totalRegistros: resposta.totalRegistros,
