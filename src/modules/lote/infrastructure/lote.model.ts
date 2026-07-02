@@ -5,8 +5,8 @@ const LoteSchema = new Schema<ILote>(
     {
         ativo: { type: Boolean, default: true },
 
-        idProduto: { type: Schema.Types.ObjectId, ref: 'Produto', required: true, index: true },
-        idDeposito: { type: Schema.Types.ObjectId, ref: 'Deposito', required: true, index: true },
+        idProduto: { type: Schema.Types.ObjectId, ref: 'Produto', required: true },
+        idDeposito: { type: Schema.Types.ObjectId, ref: 'Deposito', required: true },
 
         dataProducao: { type: Date, required: false },
         numeroLote: { type: String, required: false, trim: true, uppercase: true },
