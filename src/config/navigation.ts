@@ -11,6 +11,7 @@ import {
     Users,
     BarChart2,
     Settings,
+    Boxes
 } from 'lucide-react';
 
 export type NavItem = {
@@ -37,6 +38,7 @@ export const navigationConfig: NavGroup[] = [
         group: 'Estoque',
         items: [
             { name: 'Produtos', href: '/produtos', icon: Package },
+            { name: 'Lotes', href: '/lotes', icon: Boxes }
             
             // Em desenvolvimento
             // { name: 'Lotes (Pisos)', href: '/lotes', icon: Layers },
