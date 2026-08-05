@@ -1,6 +1,6 @@
 import { apiWrapper, sendSuccess } from "@/lib/api/route-wrapper";
 import { makeLoteService } from "@/modules/lote/application/lote.service";
-import { listarLotesSchemaValidacao } from "@/modules/lote/application/lote.validator";
+import { criarLoteSchemaValidacao, listarLotesSchemaValidacao } from "@/modules/lote/application/lote.validator";
 import { NextRequest } from "next/server";
 
 export const GET = apiWrapper(async (req: NextRequest) => {
@@ -17,4 +17,15 @@ export const GET = apiWrapper(async (req: NextRequest) => {
     const resultado = await serviceLote.listarLotes(queryValidada);
 
     return sendSuccess(resultado.data, 200, resultado.meta)
-})
+});
+
+export const POST = apiWrapper(async (req: NextRequest) => {
+    const body = await req.json();
+    
+    // Validar payload
+    const dadosValidados = criarLoteSchemaValidacao.parse(body);
+
+    const serviceLote = makeLoteService();
+    const resultado = await serviceLote.criarLote(dadosValidados);
+    return sendSuccess(resultado, 201);
+});
