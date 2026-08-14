@@ -1,10 +1,9 @@
-import { RomaneioEntity, StatusRomaneio } from "./romaneio.entity";
+import { IRomaneioProps, RomaneioEntity, StatusRomaneio } from "./romaneio.entity";
 
 export interface ListarRomaneiosParams {
     pagina: number;
     limite: number;
-    idEntregaFutura?: string;
-    status?: StatusRomaneio;
+    status?: StatusRomaneio | "TODOS";
 }
 
 export interface RespostaListarRomaneios {
@@ -17,7 +16,7 @@ export interface IRomaneioRepository {
     listarTodos(params: ListarRomaneiosParams): Promise<RespostaListarRomaneios>;
     localizarPorId(id: string): Promise<RomaneioEntity | null>;
     localizarPorIdVenda(idVenda: string): Promise<RomaneioEntity | null>;
-    salvar(romaneio: RomaneioEntity): Promise<RomaneioEntity>;
+    criar(romaneio: RomaneioEntity): Promise<RomaneioEntity>;
     atualizar(romaneio: RomaneioEntity): Promise<RomaneioEntity>;
     deletar(id: string): Promise<void>;
 };

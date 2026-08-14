@@ -1,13 +1,13 @@
 import { IRomaneioRepository, ListarRomaneiosParams, RespostaListarRomaneios } from "../domain/romaneio.repository";
 import { RomaneioEntity, IRomaneioProps } from "../domain/romaneio.entity";
 import { RomaneioModel, IRomaneioDocument } from "./romaneio.model";
-import { Types } from "mongoose";
+import { Schema, Types } from "mongoose";
 
 export class MongoRomaneioRepository implements IRomaneioRepository {
 
     private toEntity(document: IRomaneioDocument): RomaneioEntity {
         const props: IRomaneioProps = {
-            id: document._id.toString(),
+            id: document._id!.toString(),
             idEntregaFutura: (document.idEntregaFutura instanceof Types.ObjectId)
                 ? document.idEntregaFutura.toString()
                 : (document.idEntregaFutura as any)._id.toString(),
@@ -18,17 +18,25 @@ export class MongoRomaneioRepository implements IRomaneioRepository {
             destinatario: document.destinatario,
             status: document.status,
             observacoes: document.observacoes,
-            itens: document.itens,
+            itens: document.itens.map(item => {
+                return {
+                    id: item._id!.toString(),
+                    idProduto: item.idProduto.toString(),
+                    quantidade: item.quantidade,
+                    idLote: item.idLote && item.idLote.toString(),
+                    observacoesItem: item.observacoesItem
+                }
+            }),
             createdAt: document.createdAt,
             updatedAt: document.updatedAt,
         };
 
-        return new RomaneioEntity(props, props.id);
+        return new RomaneioEntity(props);
     };
 
     private toDocument(romaneio: RomaneioEntity): Partial<IRomaneioDocument> {
         return {
-            idEntregaFutura: new Types.ObjectId(romaneio.idEntregaFutura),
+            idEntregaFutura: new Schema.Types.ObjectId(romaneio.idEntregaFutura),
             idVenda: romaneio.idVenda,
             tipoVenda: romaneio.tipoVenda,
             numeroEntrega: romaneio.numeroEntrega,
@@ -36,19 +44,25 @@ export class MongoRomaneioRepository implements IRomaneioRepository {
             destinatario: romaneio.destinatario,
             status: romaneio.status,
             observacoes: romaneio.observacoes,
-            itens: [...romaneio.itens],
+            itens: romaneio.itens.map(entity => {
+                return {
+                    idProduto: new Schema.Types.ObjectId(entity.idProduto),
+                    idLote: entity.idLote ? new Schema.Types.ObjectId(entity.idLote) : undefined,
+                    quantidade: entity.quantidade,
+                    observacoesItem: entity.observacoesItem,
+                }
+            }),
             createdAt: romaneio.createdAt,
             updatedAt: romaneio.updatedAt,
         };
     };
 
-    async listarTodos({ pagina, limite, idEntregaFutura, status }: ListarRomaneiosParams): Promise<RespostaListarRomaneios> {
+    async listarTodos({ pagina, limite, status }: ListarRomaneiosParams): Promise<RespostaListarRomaneios> {
         const skip = (pagina - 1) * limite;
         const filtro: Record<string, any> = {};
 
-        if (idEntregaFutura) filtro.idEntregaFutura = idEntregaFutura;
         if (status) filtro.status = status;
-
+        
         const [romaneios, totalRegistros] = await Promise.all([
             RomaneioModel.find(filtro).sort({ dataEntrega: 1, createdAt: 1 }).skip(skip).limit(limite).lean().exec(),
             RomaneioModel.countDocuments(filtro).exec()
@@ -74,7 +88,7 @@ export class MongoRomaneioRepository implements IRomaneioRepository {
         return document ? this.toEntity(document) : null;
     };
 
-    async salvar(romaneio: RomaneioEntity): Promise<RomaneioEntity> {
+    async criar(romaneio: RomaneioEntity): Promise<RomaneioEntity> {
         const document = await RomaneioModel.create(this.toDocument(romaneio));
         return this.toEntity(document);
     };

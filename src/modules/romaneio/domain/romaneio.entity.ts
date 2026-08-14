@@ -6,12 +6,12 @@ export enum StatusRomaneio {
 
 export interface IDestinatario {
     nome: string,
-    telefone: string,
     endereco: string
+    telefone?: string,
 };
 
 export interface IItemRomaneioProps {
-    id: string,
+    id?: string,
     idProduto: string,
     idLote?: string,
     quantidade: number,
@@ -29,7 +29,7 @@ export interface IRomaneioProps {
     status: StatusRomaneio;
     observacoes?: string;
     itens: IItemRomaneioProps[];
-    createdAt: Date;
+    createdAt?: Date;
     updatedAt?: Date;
 };
 
@@ -47,8 +47,8 @@ export class RomaneioEntity {
     private _itens: IItemRomaneioProps[];
     private _updatedAt?: Date;
 
-    constructor(props: IRomaneioProps, id?: string) {
-        this._id = id || props.id;
+    constructor(props: IRomaneioProps) {
+        this._id = props.id;
         this._idEntregaFutura = props.idEntregaFutura;
         this._idVenda = props.idVenda;
         this._createdAt = props.createdAt || new Date();
