@@ -34,8 +34,10 @@ export default function VisualizarEntregaFuturaPage({ params }: { params: Promis
             setLoading(true);
             const data = await entregaFuturaApi.buscarPorId(id);
             setEntrega(data);
-        } catch (err: any) {
-            setError(err.message || 'Erro ao carregar dados da entrega.');
+        } catch (err) {
+            (err instanceof Error)
+                ? setError(err.message)
+                : setError('Erro ao carregar dados da entrega.')
         } finally {
             setLoading(false);
         }
@@ -43,7 +45,7 @@ export default function VisualizarEntregaFuturaPage({ params }: { params: Promis
 
     useEffect(() => {
         fetchEntrega();
-    }, [id]);
+    }, [id, fetchEntrega]);
 
     // ─── Lógica do Romaneio ──────────────────────────────────────────────────
 
@@ -86,8 +88,10 @@ export default function VisualizarEntregaFuturaPage({ params }: { params: Promis
             // Limpa o carrinho e recarrega os dados do backend
             setRomaneio([]);
             await fetchEntrega();
-        } catch (err: any) {
-            setNotification({ type: 'error', message: err.message || 'Erro ao registrar romaneio.' });
+        } catch (err) {
+            (err instanceof Error)
+                ? setNotification({ type: 'error', message: err.message || 'Erro ao registrar romaneio.' })
+                : setNotification({ type: 'error', message: 'Erro ao registrar romaneio.' });
         } finally {
             setSubmitting(false);
         }
