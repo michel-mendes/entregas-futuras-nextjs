@@ -51,10 +51,11 @@ export const navigationConfig: NavGroup[] = [
             // Em desenvolvimento
             { name: 'Entregas Futuras', href: '/entregas-futuras', icon: CalendarClock },
             { name: 'Romaneios', href: '/romaneios', icon: Truck },
+            { name: 'Warehouses', href: '/warehouses', icon: Warehouse },
             // { name: 'Pedidos', href: '/pedidos', icon: ShoppingCart },
         ],
     },
-    {
+    /*{
         group: 'Gestão',
         items: [
             // Em desenvolvimento
@@ -62,5 +63,5 @@ export const navigationConfig: NavGroup[] = [
             // { name: 'Relatórios', href: '/relatorios', icon: BarChart2 },
             // { name: 'Configurações', href: '/configuracoes', icon: Settings },
         ],
-    },
+    },*/
 ];
