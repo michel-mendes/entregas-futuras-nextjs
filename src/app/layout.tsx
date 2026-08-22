@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { DM_Sans, DM_Mono } from 'next/font/google';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { TopBar } from '@/components/layout/TopBar';
+import { Toaster } from '../components/ui/ToastNotifier';
 
 import Providers from './QueryProviders';
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="flex-1 overflow-y-auto overflow-x-hidden p-6 scrollbar-thin">
               <div className="max-w-7xl mx-auto">
                 {children}
+                <Toaster />
               </div>
             </main>
           </div>
