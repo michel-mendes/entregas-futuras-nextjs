@@ -2,6 +2,7 @@ import { Model, QueryFilter, Schema } from "mongoose";
 import { WarehouseEntity } from "../domain/warehouse.entity";
 import { IWarehouseDocument } from "./warehouse.model";
 import { IWarehouseRepository, ListWarehousesParams, ListWarehousesResponse } from "../domain/warehouse.repository";
+import { AppError } from "@/lib/errors/AppError";
 
 export class WarehouseMongooseRepository implements IWarehouseRepository {
 
@@ -77,7 +78,7 @@ export class WarehouseMongooseRepository implements IWarehouseRepository {
         const { id, ...dataToUpdate } = props;
 
         if (!id) {
-            throw new Error("Cannot update a warehouse without an ID.");
+            throw AppError.BadRequest("Cannot update a warehouse without an ID.");
         }
 
         const updatedDoc = await this.model
@@ -86,7 +87,7 @@ export class WarehouseMongooseRepository implements IWarehouseRepository {
             .exec();
 
         if (!updatedDoc) {
-            throw new Error(`Warehouse with ID ${id} not found.`);
+            throw AppError.NotFound(`Warehouse with ID ${id} not found.`);
         }
 
         return this.toDomain(updatedDoc);
@@ -97,7 +98,7 @@ export class WarehouseMongooseRepository implements IWarehouseRepository {
         const result = await this.model.deleteOne({ _id: objectId }).exec();
 
         if (result.deletedCount === 0) {
-            throw new Error(`Warehouse with ID ${id} not found.`);
+            throw AppError.NotFound(`Warehouse with ID ${id} not found.`);
         }
     }
 }

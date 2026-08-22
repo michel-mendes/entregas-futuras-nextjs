@@ -1,3 +1,5 @@
+import { AppError } from "@/lib/errors/AppError";
+
 export interface IWarehouseProps {
     id?: string;
     name: string;
@@ -36,7 +38,7 @@ export class WarehouseEntity {
 
     public activate(): void {
         if (this._isActive) {
-            throw new Error("Warehouse is already active.");
+            throw AppError.BadRequest("Warehouse is already active.");
         }
 
         this._isActive = true;
@@ -45,7 +47,7 @@ export class WarehouseEntity {
 
     public deactivate(): void {
         if (!this._isActive) {
-            throw new Error("Warehouse is already inactive.");
+            throw AppError.BadRequest("Warehouse is already inactive.");
         }
 
         this._isActive = false;
@@ -64,10 +66,10 @@ export class WarehouseEntity {
 
     private validate(): void {
         if (!this._name || this._name.trim().length === 0) {
-            throw new Error("Name is required.");
+            throw AppError.BadRequest("Name is required.");
         }
         if (!this._sector || this._sector.trim().length === 0) {
-            throw new Error("Sector is required.");
+            throw AppError.BadRequest("Sector is required.");
         }
     }
 

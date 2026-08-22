@@ -4,6 +4,7 @@ import { WarehouseEntity, IWarehouseProps } from "../domain/warehouse.entity";
 import { WarehouseMongooseRepository } from "../infrastructure/warehouse.mongo.repository";
 import { WarehouseModel } from "../infrastructure/warehouse.model";
 import { CreateWarehouseDTO, UpdateWarehouseDTO } from "../presentation/warehouse.validation";
+import { AppError } from "@/lib/errors/AppError";
 
 export class WarehouseService {
 
@@ -13,7 +14,7 @@ export class WarehouseService {
         
         const existingWarehouse = await this.warehouseRepository.findByName(data.name);
         if (existingWarehouse) {
-            throw new Error(`A warehouse with the name '${data.name}' already exists.`);
+            throw AppError.Conflict(`A warehouse with the name '${data.name}' already exists.`);
         }
 
         const newWarehouseEntity = new WarehouseEntity({
@@ -48,7 +49,7 @@ export class WarehouseService {
     async getWarehouseById(id: string): Promise<IWarehouseProps> {
         const warehouse = await this.warehouseRepository.findById(id);
         if (!warehouse) {
-            throw new Error(`Warehouse with ID '${id}' not found.`);
+            throw AppError.NotFound(`Warehouse with ID '${id}' not found.`);
         }
 
         return warehouse.toObject();
@@ -57,13 +58,13 @@ export class WarehouseService {
     async updateWarehouse(id: string, data: UpdateWarehouseDTO): Promise<IWarehouseProps> {
         const warehouse = await this.warehouseRepository.findById(id);
         if (!warehouse) {
-            throw new Error(`Warehouse with ID '${id}' not found.`);
+            throw AppError.NotFound(`Warehouse with ID '${id}' not found.`);
         }
 
         if (warehouse.name !== data.name) {
             const nameCollision = await this.warehouseRepository.findByName(data.name);
             if (nameCollision) {
-                throw new Error(`A warehouse with the name '${data.name}' already exists.`);
+                throw AppError.Conflict(`A warehouse with the name '${data.name}' already exists.`);
             }
         }
 
@@ -76,7 +77,7 @@ export class WarehouseService {
     async toggleStatus(id: string, activate: boolean): Promise<IWarehouseProps> {
         const warehouse = await this.warehouseRepository.findById(id);
         if (!warehouse) {
-            throw new Error(`Warehouse with ID '${id}' not found.`);
+            throw AppError.NotFound(`Warehouse with ID '${id}' not found.`);
         }
 
         if (activate) {
