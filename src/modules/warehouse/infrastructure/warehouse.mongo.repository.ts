@@ -94,8 +94,7 @@ export class WarehouseMongooseRepository implements IWarehouseRepository {
     }
 
     async delete(id: string): Promise<void> {
-        const objectId = new Schema.Types.ObjectId(id);
-        const result = await this.model.deleteOne({ _id: objectId }).exec();
+        const result = await this.model.deleteOne({ _id: id }).exec();
 
         if (result.deletedCount === 0) {
             throw AppError.NotFound(`Warehouse with ID ${id} not found.`);

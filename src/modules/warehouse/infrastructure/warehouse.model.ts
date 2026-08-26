@@ -1,7 +1,7 @@
-import { Model, Schema, model, models } from 'mongoose';
+import { Model, Schema, Types, model, models } from 'mongoose';
 
 export interface IWarehouseDocument extends Document {
-    _id: Schema.Types.ObjectId;
+    _id: Types.ObjectId;
     name: string;
     sector: string;
     isActive: boolean;

@@ -3,7 +3,7 @@ import { AppError } from "../errors/AppError";
 
 export async function handleApiResponse<T>(response: Response): Promise<ApiResponse<T>> {
     let result: ApiResponse<T>;
-    
+  
     try {
         result = await response.json();
     } catch (error) {
