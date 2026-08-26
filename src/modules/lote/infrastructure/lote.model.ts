@@ -1,31 +1,48 @@
-import { Schema, model, models, Model } from 'mongoose';
-import { ILote } from '../lote.types';
+import { Schema, model, models, Model, Document, Types } from 'mongoose';
 
-const LoteSchema = new Schema<ILote>(
+export interface BatchDocument extends Omit<Document, "_id"> {
+    _id: Types.ObjectId;
+    active: boolean;
+    productId: Types.ObjectId;
+    warehouseId: Types.ObjectId;
+    productionDate?: Date;
+    batchNumber?: string;
+    gauge: number;
+    shade: number;
+    initialQuantity: number;
+    currentQuantity: number;
+    reservedQuantity: number;
+    detailedLocation?: string;
+    notes?: string;
+    createdAt: Date;
+    updatedAt?: Date;
+}
+
+const BatchSchema = new Schema<BatchDocument>(
     {
-        ativo: { type: Boolean, default: true },
+        active: { type: Boolean, default: true },
 
-        idProduto: { type: Schema.Types.ObjectId, ref: 'Produto', required: true },
-        idDeposito: { type: Schema.Types.ObjectId, ref: 'Deposito', required: true },
+        productId: { type: Types.ObjectId, ref: 'Produto', required: true },
+        warehouseId: { type: Types.ObjectId, ref: 'Warehouse', required: true },
 
-        dataProducao: { type: Date, required: false },
-        numeroLote: { type: String, required: false, trim: true, uppercase: true },
-        bitola: { type: Number, required: true },
-        tonalidade: { type: Number, required: true },
+        productionDate: { type: Date, required: false },
+        batchNumber: { type: String, required: false, trim: true, uppercase: true },
+        gauge: { type: Number, required: true },
+        shade: { type: Number, required: true },
 
-        quantidadeInicial: { type: Number, required: true, min: 0 },
-        quantidadeAtual: { type: Number, required: true, min: 0 },
-        quantidadeReservada: { type: Number, default: 0, min: 0 },
+        initialQuantity: { type: Number, required: true, min: 0 },
+        currentQuantity: { type: Number, required: true, min: 0 },
+        reservedQuantity: { type: Number, default: 0, min: 0 },
 
-        localizacaoDetalhada: { type: String, trim: true, uppercase: true, required: false },
-        observacoes: { type: String, trim: true, required: false },
+        detailedLocation: { type: String, trim: true, uppercase: true, required: false },
+        notes: { type: String, trim: true, required: false },
     },
     { timestamps: true }
 );
 
 // Índices
-LoteSchema.index({ idProduto: 1, ativo: 1 });       // Busca rápida por produto e lotes ativos (A query mais comum no dia a dia)
-LoteSchema.index({ idDeposito: 1 });                // Busca rápida por depósito
-LoteSchema.index({ idProduto: 1, numeroLote: 1 });  // Busca exata de um lote de um produto
+BatchSchema.index({ productId: 1, active: 1 });       // Busca rápida por produto e lotes ativos (A query mais comum no dia a dia)
+BatchSchema.index({ warehouseId: 1 });                // Busca rápida por depósito
+BatchSchema.index({ productId: 1, batchNumber: 1 });  // Busca exata de um lote de um produto
 
-export const Lote: Model<ILote> = models.Lote || model<ILote>('Lote', LoteSchema);
+export const BatchModel: Model<BatchDocument> = models.Batch || model<BatchDocument>('Batch', BatchSchema);

@@ -1,73 +1,59 @@
 import { PaginatedResponse } from "@/types/pagination.types";
-import { ILoteRepository, ListarLotesParams } from "../domain/lote.repository";
-import { MongoLoteRepository } from "../infrastructure/lote.mongo.repository";
-import { LotePresenter } from "./lote.presenter";
-import { LoteRespostaApiDTO } from "./lote.dto";
-import z from "zod";
-import { criarLoteSchemaValidacao } from "./lote.validator";
-import { LoteEntity } from "../domain/lote.entity";
+import { BatchRepository, BatchSearchFilters } from "../domain/lote.repository";
+import { CreateBatchDTO } from "./lote.validator";
+import { BatchEntity, BatchProps } from "../domain/lote.entity";
+import { MongoBatchRepository } from "../infrastructure/lote.mongo.repository";
+import { BatchModel } from "../infrastructure/lote.model";
+import { Produto } from "@/modules/produto/produto.model";
+import { WarehouseModel } from "@/modules/warehouse/infrastructure/warehouse.model";
 
-export class LoteService {
-    constructor(private readonly loteRepository: ILoteRepository) { }
+export class BatchService {
+    constructor(private readonly batchRepository: BatchRepository) { }
 
-    async criarLote(dados: z.infer<typeof criarLoteSchemaValidacao>): Promise<LoteRespostaApiDTO> {
-        const novoLoteEntity = new LoteEntity({
-            id: "",
-            idProduto: dados.idProduto,
-            idDeposito: dados.idDeposito,
-            bitola: dados.bitola,
-            tonalidade: dados.tonalidade,
-            quantidadeInicial: dados.quantidadeInicial,
-            quantidadeAtual: dados.quantidadeInicial,
-            quantidadeReservada: 0,
-            numeroLote: dados.numeroLote,
-            ativo: true,
+    async createBatch(data: CreateBatchDTO): Promise<BatchProps> {
+        
+        const newBatchEntity = new BatchEntity({
+            productId: data.productId,
+            warehouseId: data.warehouseId,
+            gauge: data.gauge,
+            shade: data.shade,
+            initialQuantity: data.initialQuantity,
+            productionDate: data.productionDate,
+            batchNumber: data.batchNumber,
+            detailedLocation: data.detailedLocation,
+            notes: data.notes,
+            active: true,
+            currentQuantity: data.initialQuantity,
+            reservedQuantity: 0,
+            createdAt: new Date()
         });
 
-        const loteCriado = await this.loteRepository.criar({
-            idProduto: novoLoteEntity.idProduto,
-            idDeposito: novoLoteEntity.idDeposito,
-            bitola: novoLoteEntity.bitola,
-            tonalidade: novoLoteEntity.tonalidade,
-            quantidadeInicial: novoLoteEntity.quantidadeInicial,
-            numeroLote: novoLoteEntity.numeroLote,
-            localizacaoDetalhada: novoLoteEntity.localizacaoDetalhada,
-            observacoes: novoLoteEntity.observacoes
-        });
+        const createdBatch = await this.batchRepository.create(newBatchEntity);
 
-        return LotePresenter.toJSON(loteCriado);
+        return createdBatch.toObject();
     }
     
-    /**
-     * Lista lotes com paginação e limite de resultados por página.
-     */
-    async listarLotes({ limite, pagina }: ListarLotesParams): Promise<PaginatedResponse<LoteRespostaApiDTO>> {
-        const parametrosValidados: ListarLotesParams = {
-            limite: Math.max(1, limite),
-            pagina: Math.max(1, pagina)
-        };
-        
-        const resposta = await this.loteRepository.listar(parametrosValidados);
-        const lotesJson = resposta.dados.map(loteEntity => LotePresenter.toJSON(loteEntity))
+    async searchBatches(params: BatchSearchFilters): Promise<PaginatedResponse<BatchProps>> {
+        const response = await this.batchRepository.search(params);
+
+        const batchesJson = response.data.map(entity => entity.toObject());
 
         return {
-            data: lotesJson,
+            data: batchesJson,
             meta: {
-                totalPaginas: resposta.totalPaginas,
-                totalRegistros: resposta.totalRegistros,
-                paginaAtual: pagina,
-                itensPorPagina: limite,
-                temPaginaAnterior: pagina > 1,
-                temProximaPagina: pagina < resposta.totalPaginas
+                totalPaginas: response.totalPages,
+                totalRegistros: response.totalRecords,
+                paginaAtual: params.page,
+                itensPorPagina: params.limit,
+                temPaginaAnterior: params.page < response.totalPages,
+                temProximaPagina: params.page > 1
             }
         };
     }
 }
 
-// Factory para criação do serviço de lotes com injeção de dependência
-export function makeLoteService(): LoteService {
-    const repositorioLotes = new MongoLoteRepository();
-    const loteService = new LoteService(repositorioLotes);
+export function makeBatchService(): BatchService {
+    const batchRepository = new MongoBatchRepository(BatchModel, Produto, WarehouseModel);
 
-    return loteService;
+    return new BatchService(batchRepository);
 }
