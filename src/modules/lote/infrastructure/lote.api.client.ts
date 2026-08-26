@@ -1,45 +1,35 @@
-import { PaginatedResponse } from "@/types/pagination.types";
-import { CriarLoteDTO } from "../application/lote.dto";
-import { LoteRespostaApiDTO } from "../application/lote.dto";
 import { ApiResponse } from "@/types/api-response.types";
+import { BatchSearchFilters } from "../domain/lote.repository";
+import { BatchProps } from "../domain/lote.entity";
+import { handleApiResponse } from "@/lib/api/api-response-handler";
+import { CreateBatchDTO } from "../application/lote.validator";
 
-interface FetchLoteParams {
-    pagina: number;
-    limite: number;
-}
+export async function fetchBatches(params: BatchSearchFilters): Promise<ApiResponse<BatchProps[]>> {
+    const url = new URL("/api/batches", window.location.origin);
 
-const extrairErro = (data: ApiResponse<LoteRespostaApiDTO>, mensagemPadrao: string) => {
-    const msgErro = `${data.error?.message || ""}${(data.error?.details) ? `:\n${data.error.details}` : ""}`
-    return new Error(msgErro || mensagemPadrao);
-};
+    url.searchParams.append("page", params.page.toString());
+    url.searchParams.append("limit", params.limit.toString());
 
-export async function fetchLotes({limite, pagina}: FetchLoteParams): Promise<PaginatedResponse<LoteRespostaApiDTO>> {
-    const url = new URL("/api/lotes", window.location.origin)
+    if (params.productName) url.searchParams.append("productName", params.productName);
+    if (params.warehouseName) url.searchParams.append("warehouseName", params.warehouseName);
+    if (params.status && params.status !== "ALL") url.searchParams.append("status", params.status);
 
-    url.searchParams.append("pagina", pagina.toString());
-    url.searchParams.append("limite", limite.toString());
-
-    const response = await fetch(url.toString());
-
-    if (!response) {
-        throw new Error("Falha ao buscar listem de lotes");
-    }
-
-    const json: PaginatedResponse<LoteRespostaApiDTO> = await response.json()
-    return json;
-};
-
-export async function criarLoteApi(dados: CriarLoteDTO): Promise<LoteRespostaApiDTO> {
-    const response = await fetch("/api/lotes", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(dados)
+    const response = await fetch(url.toString(), {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
     });
 
-    const result: ApiResponse<LoteRespostaApiDTO> = await response.json()
+    return await handleApiResponse<BatchProps[]>(response);
+};
 
-    if (!response.ok || !result.success) {
-        throw extrairErro(result, 'Falha ao cadastrar o produto.');
-    }
-    return result.data!;
-}
+export async function createBatchApi(data: CreateBatchDTO): Promise<BatchProps> {
+    const response = await fetch("/api/batches", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
+
+    const result = await handleApiResponse<BatchProps>(response);
+
+    return result.data as BatchProps;
+};
