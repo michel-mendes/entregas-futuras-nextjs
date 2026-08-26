@@ -1,17 +1,26 @@
 import { z } from "zod";
 
-export const criarLoteSchemaValidacao = z.object({
-    idProduto: z.string().min(1, "ID do produto é obrigatório"),
-    idDeposito: z.string().min(1, "ID do depósito é obrigatório"),
-    bitola: z.number().int("O número da bitola deve ser um número inteiro"),
-    tonalidade: z.number().int("O número da tonalidade deve ser um número inteiro"),
-    quantidadeInicial: z.number().min(0.01, "A quantidade inicial deve ser maior que zero"),
-    numeroLote: z.string().optional(),
-    localizacaoDetalhada: z.string().optional(),
-    observacoes: z.string().optional()
+const statusBatchSchema = z.enum(["ACTIVE", "INACTIVE", "ALL"], "Status must be 'ACTIVE', 'INACTIVE', or 'ALL'.");
+
+export const createBatchSchema = z.object({
+    productId: z.string().min(1, "Product ID cannot be empty"),
+    warehouseId: z.string().min(1, "Warehouse ID cannot be empty"),
+    gauge: z.number().int("Caliber must be an integer"),
+    shade: z.number().int("Shade must be an integer"),
+    initialQuantity: z.number().min(0.01, "Initial quantity must be greater than zero"),
+    productionDate: z.date().optional(),
+    batchNumber: z.string().optional(),
+    detailedLocation: z.string().optional(),
+    notes: z.string().optional()
 });
 
-export const listarLotesSchemaValidacao = z.object({
-    pagina: z.coerce.number().int().min(1).default(1),
-    limite: z.coerce.number().int().min(1).max(100).default(10)
+export const searchBatchesSchema = z.object({
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(10),
+    productName: z.string().optional(),
+    warehouseName: z.string().optional(),
+    status: statusBatchSchema.optional()
 });
+
+export type CreateBatchDTO = z.infer<typeof createBatchSchema>;
+export type SearchBatchesDTO = z.infer<typeof searchBatchesSchema>;

@@ -19,6 +19,10 @@ export interface BatchProps {
     detailedLocation?: string;         // Additional location details, e.g. "Aisle 3", "Mezzanine 2"
     notes?: string;                    // Additional notes, e.g. "Damaged box", "Clearance stock"
 
+    // For search purposes only, not stored in the database
+    productName?: string;
+    warehouseName?: string;
+
     createdAt: Date;
     updatedAt?: Date;
 }
@@ -41,6 +45,8 @@ export class BatchEntity {
     private _reservedQuantity: number;
     private _detailedLocation?: string;
     private _notes?: string;
+    private _productName?: string;
+    private _warehouseName?: string;
     private _updatedAt?: Date;
 
     constructor(props: BatchProps) {
@@ -73,6 +79,8 @@ export class BatchEntity {
         this._reservedQuantity = props.reservedQuantity;
         this._detailedLocation = props.detailedLocation;
         this._notes = props.notes;
+        this._productName = props.productName;
+        this._warehouseName = props.warehouseName;
         this._updatedAt = props.updatedAt;
     }
 
@@ -89,6 +97,8 @@ export class BatchEntity {
     get reservedQuantity(): number { return this._reservedQuantity }
     get detailedLocation(): string | undefined { return this._detailedLocation }
     get notes(): string | undefined { return this._notes }
+    get productName(): string | undefined { return this._productName }
+    get warehouseName(): string | undefined { return this._warehouseName }
     get createdAt(): Date { return this._createdAt }
     get updatedAt(): Date | undefined { return this._updatedAt }
 
@@ -194,6 +204,8 @@ export class BatchEntity {
             reservedQuantity: this._reservedQuantity,
             detailedLocation: this._detailedLocation,
             notes: this._notes,
+            productName: this._productName,
+            warehouseName: this._warehouseName,
             createdAt: this._createdAt,
             updatedAt: this._updatedAt,
         };
