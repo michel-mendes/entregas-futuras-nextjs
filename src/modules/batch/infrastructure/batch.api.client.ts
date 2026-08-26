@@ -1,8 +1,8 @@
 import { ApiResponse } from "@/types/api-response.types";
-import { BatchSearchFilters } from "../domain/lote.repository";
-import { BatchProps } from "../domain/lote.entity";
+import { BatchSearchFilters } from "../domain/batch.repository";
+import { BatchProps } from "../domain/batch.entity";
 import { handleApiResponse } from "@/lib/api/api-response-handler";
-import { CreateBatchDTO } from "../application/lote.validator";
+import { CreateBatchDTO } from "../application/batch.validator";
 
 export async function fetchBatches(params: BatchSearchFilters): Promise<ApiResponse<BatchProps[]>> {
     const url = new URL("/api/batches", window.location.origin);

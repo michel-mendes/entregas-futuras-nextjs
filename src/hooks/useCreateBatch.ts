@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createBatchApi } from "@/modules/lote/infrastructure/lote.api.client";
+import { createBatchApi } from "@/modules/batch/infrastructure/batch.api.client";
 
-export function useCriarLote() {
+export function useCreateBatch() {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: createBatchApi,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["lotes", "listagem"] });
+            queryClient.invalidateQueries({ queryKey: ["batches", "search"] });
         }
     });
 }

@@ -1,6 +1,6 @@
 import { apiWrapper, sendSuccess } from "@/lib/api/route-wrapper";
-import { makeBatchService } from "@/modules/lote/application/lote.service";
-import { createBatchSchema, searchBatchesSchema } from "@/modules/lote/application/lote.validator";
+import { makeBatchService } from "@/modules/batch/application/batch.service";
+import { createBatchSchema, searchBatchesSchema } from "@/modules/batch/application/batch.validator";
 import { NextRequest } from "next/server";
 
 const serviceBatch = makeBatchService();

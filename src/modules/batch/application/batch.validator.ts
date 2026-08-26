@@ -5,7 +5,7 @@ const statusBatchSchema = z.enum(["ACTIVE", "INACTIVE", "ALL"], "Status must be 
 export const createBatchSchema = z.object({
     productId: z.string().min(1, "Product ID cannot be empty"),
     warehouseId: z.string().min(1, "Warehouse ID cannot be empty"),
-    gauge: z.number().int("Caliber must be an integer"),
+    gauge: z.number().int("Gauge must be an integer"),
     shade: z.number().int("Shade must be an integer"),
     initialQuantity: z.number().min(0.01, "Initial quantity must be greater than zero"),
     productionDate: z.date().optional(),

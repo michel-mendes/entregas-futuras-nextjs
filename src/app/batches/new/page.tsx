@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCriarLote } from "@/hooks/useCriarLote";
+import { useCreateBatch } from "@/hooks/useCreateBatch";
 
 export default function NovoLotePage() {
     const router = useRouter();
-    const { mutate, isPending, isError, error } = useCriarLote();
+    const { mutate, isPending, isError, error } = useCreateBatch();
 
     const [form, setForm] = useState({
         idProduto: "",

@@ -1,9 +1,9 @@
 import { PaginatedResponse } from "@/types/pagination.types";
-import { BatchRepository, BatchSearchFilters } from "../domain/lote.repository";
-import { CreateBatchDTO } from "./lote.validator";
-import { BatchEntity, BatchProps } from "../domain/lote.entity";
-import { MongoBatchRepository } from "../infrastructure/lote.mongo.repository";
-import { BatchModel } from "../infrastructure/lote.model";
+import { BatchRepository, BatchSearchFilters } from "../domain/batch.repository";
+import { CreateBatchDTO } from "./batch.validator";
+import { BatchEntity, BatchProps } from "../domain/batch.entity";
+import { MongoBatchRepository } from "../infrastructure/batch.mongo.repository";
+import { BatchModel } from "../infrastructure/batch.model";
 import { Produto } from "@/modules/produto/produto.model";
 import { WarehouseModel } from "@/modules/warehouse/infrastructure/warehouse.model";
 

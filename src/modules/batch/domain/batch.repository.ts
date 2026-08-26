@@ -1,4 +1,4 @@
-import { BatchEntity } from "./lote.entity";
+import { BatchEntity } from "./batch.entity";
 
 export type BatchStatusFilter = "ACTIVE" | "INACTIVE" | "ALL";
 

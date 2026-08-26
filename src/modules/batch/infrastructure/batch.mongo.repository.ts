@@ -1,8 +1,8 @@
 import { Model, QueryFilter, Types } from "mongoose";
 
-import { BatchEntity } from "../domain/lote.entity";
-import { BatchRepository, BatchSearchFilters, SearchBatchResponse } from "../domain/lote.repository";
-import { BatchDocument } from "./lote.model";
+import { BatchEntity } from "../domain/batch.entity";
+import { BatchRepository, BatchSearchFilters, SearchBatchResponse } from "../domain/batch.repository";
+import { BatchDocument } from "./batch.model";
 
 import { IWarehouseDocument } from "@/modules/warehouse/infrastructure/warehouse.model";
 import { IProduto } from "@/modules/produto/produto.types";

@@ -1,11 +1,11 @@
 "use client";
 
-import { useLotes } from "@/hooks/useLotes";
+import { useBatches } from "@/hooks/useBatches";
 import { useState } from "react";
 
 import { PlusCircle } from "lucide-react"
 import Link from "next/link";
-import { BatchSearchFilters } from "@/modules/lote/domain/lote.repository";
+import { BatchSearchFilters } from "@/modules/batch/domain/batch.repository";
 
 export default function LotesPage() {
     const [filters, setFilters] = useState<BatchSearchFilters>({
@@ -18,7 +18,7 @@ export default function LotesPage() {
     const [pagina, setPagina] = useState(1);
     const [limite, setLimite] = useState(10);
 
-    const { data, isLoading, isError, error } = useLotes(filters);
+    const { data, isLoading, isError, error } = useBatches(filters);
 
     if (isLoading) return <div>Carregando lotes...</div>
     if (isError) return <div>Erro ao carregar lotes: {error.message}</div>;
