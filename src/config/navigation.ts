@@ -38,11 +38,7 @@ export const navigationConfig: NavGroup[] = [
         group: 'Estoque',
         items: [
             { name: 'Produtos', href: '/produtos', icon: Package },
-            { name: 'Lotes', href: '/lotes', icon: Boxes }
-            
-            // Em desenvolvimento
-            // { name: 'Lotes (Pisos)', href: '/lotes', icon: Layers },
-            // { name: 'Depósitos', href: '/depositos', icon: Warehouse },
+            { name: 'Lotes', href: '/batches', icon: Boxes }
         ],
     },
     {
