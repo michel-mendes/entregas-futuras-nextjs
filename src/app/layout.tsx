@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Sidebar />
           <div className="flex flex-1 flex-col min-w-0 h-full overflow-hidden">
             <TopBar />
-            <main className="flex-1 overflow-y-auto overflow-x-hidden p-6 scrollbar-thin">
+            <main className="flex-1 overflow-y-auto overflow-x-hidden p scrollbar-thin">
               <div className="max-w-7xl mx-auto">
                 {children}
                 <Toaster />
