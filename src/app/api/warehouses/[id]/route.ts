@@ -7,6 +7,13 @@ const serviceWarehouses = makeWarehouseService();
 
 interface RouteParams { id: string }
 
+export const GET = apiWrapper(async (req: NextRequest, { params }: { params: Promise<RouteParams> }) => {
+    const { id } = await params;
+    const result = await serviceWarehouses.getWarehouseById(id);
+
+    return sendSuccess(result, 200);
+});
+
 export const PATCH = apiWrapper(async (req: NextRequest, { params }: { params: Promise<RouteParams> }) => {
     const { id } = await params;
     const body = await req.json();

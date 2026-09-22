@@ -66,7 +66,7 @@ export function apiWrapper(handler: RouteHandler) {
                 success: false,
                 error: {
                     code: 'INTERNAL_SERVER_ERROR',
-                    message: `Ocorreu um erro interno no servidor. ${error._message || 'Erro desconhecido'}`,
+                    message: `Ocorreu um erro interno no servidor. ${error || error._message || 'Erro desconhecido'}`,
                 },
             };
 

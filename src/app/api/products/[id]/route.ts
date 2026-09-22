@@ -1,33 +1,52 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { produtoService } from '@/modules/produto/produto.service';
-import { UpdateProdutoDTO } from '@/modules/produto/produto.dto';
-import { apiWrapper, sendSuccess } from '@/lib/api/route-wrapper';
+import { apiWrapper, sendSuccess } from "@/lib/api/route-wrapper";
+import { ProductIdParamSchema, UpdateProductSchema } from "@/modules/product/application/product.validator";
+import { DeleteProductUseCase } from "@/modules/product/application/use-cases/delete-product.use-case";
+import { GetProductByIdUseCase } from "@/modules/product/application/use-cases/get-product-by-id.use-case";
+import { UpdateProductUseCase } from "@/modules/product/application/use-cases/update-product.use-case";
+import { ProductModel } from "@/modules/product/infrasctructure/product.model";
+import { MongooseProductRepository } from "@/modules/product/infrasctructure/product.mongoose-repository";
+import { NextRequest } from "next/server";
 
-interface RouteParams { id: string }
+interface RouteParams { id: string };
 
+const mongooseProductRepository = new MongooseProductRepository(ProductModel);
+const findProductByIdUseCase = new GetProductByIdUseCase(mongooseProductRepository);
+const updateProductUseCase = new UpdateProductUseCase(mongooseProductRepository);
+const deleteProductUseCase = new DeleteProductUseCase(mongooseProductRepository);
+
+// -----------------------------
+// GET /api/products/[id]
+// -----------------------------
 export const GET = apiWrapper(async (req: NextRequest, { params }: { params: Promise<RouteParams> }) => {
-    const { id } = await params;
-    const produto = await produtoService.buscarProdutoPorId(id);
+    const { id } = await ProductIdParamSchema.parseAsync(await params);
+    const product = await findProductByIdUseCase.execute(id);
 
-    return sendSuccess(produto);
+    return sendSuccess(product, 200);
 });
 
-export const PUT = apiWrapper(async (req: NextRequest, { params }: { params: Promise<RouteParams> }) => {
+
+// -----------------------------
+// PATCH /api/products/[id]
+// -----------------------------
+export const PATCH = apiWrapper(async (req: NextRequest, { params }: { params: Promise<RouteParams> }) => {
+    const { id } = await ProductIdParamSchema.parseAsync(await params);
     const body = await req.json();
 
-    const dadosValidados = UpdateProdutoDTO.parse(body);
-    const { id } = await params;
+    const validatedBody = UpdateProductSchema.parse(body);
 
-    const produtoAtualizado = await produtoService.atualizarProduto(id, dadosValidados);
+    const product = await updateProductUseCase.execute(id, { ...validatedBody })
 
-    return sendSuccess(produtoAtualizado);
+    return sendSuccess(product, 200);
 });
 
+
+// -----------------------------
+// DELETE /api/products/[id]
+// -----------------------------
 export const DELETE = apiWrapper(async (req: NextRequest, { params }: { params: Promise<RouteParams> }) => {
-    const { id } = await params;
+    const { id } = await ProductIdParamSchema.parseAsync(await params);
+    
+    await deleteProductUseCase.execute(id);
 
-    await produtoService.desativarProduto(id);
-
-    // Retorno padrão para DELETE é payload vazio com 204 (No Content)
-    return new NextResponse(null, { status: 204 });
+    return sendSuccess({ message: "Product deleted successfully." }, 200);
 });
