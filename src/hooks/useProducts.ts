@@ -1,67 +1,61 @@
-import { useState, useEffect, useCallback } from 'react';
-import { produtosApi } from '@/modules/produto/produto.api';
-import { IProduto } from '@/modules/produto/produto.types';
-import { PaginatedResponse } from '@/types/pagination.types';
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from "@tanstack/react-query";
+import { CreateProductInput, UpdateProductInput } from "@/modules/product/application/product.validator";
+import { ProductFilter } from "@/modules/product/domain/product.repository";
+import { productsApi } from "@/modules/product/presentation/product.api";
 
-export function useProdutos(limiteInicial = 20) {
-    const [data, setData] = useState<PaginatedResponse<IProduto> | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+export function useProducts(params: ProductFilter) {
+    const queryParams: ProductFilter = {
+        ...params,
+        page: params.page || 1,
+        limit: params.limit || 10,
+    };
 
-    const [page, setPage] = useState(1);
-    const [termoBusca, setTermoBusca] = useState('');
-    const [apenasAtivos, setApenasAtivos] = useState(true)
+    return useQuery<Awaited<ReturnType<typeof productsApi.fetchProducts>>, Error>({
+        queryKey: ["products", "list", queryParams],
+        queryFn: () => productsApi.fetchProducts(queryParams),
+        placeholderData: keepPreviousData,
+        staleTime: 1000 * 60 * 5,
+    })
+};
 
-    const fetchProdutos = useCallback(async () => {
-        try {
-            setIsLoading(true);
-            setError(null);
+export function useCreateProduct() {
+    const queryClient = useQueryClient();
 
-            const result = await produtosApi.listar({ page, limit: limiteInicial, apenasAtivos, termoBusca });
+    return useMutation<
+        Awaited<ReturnType<typeof productsApi.createProduct>>, Error, CreateProductInput>({
+            mutationFn: (productData) => productsApi.createProduct(productData),
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["products", "list"] });
+            }
+        })
+};
 
-            setData(result);
-        } catch (err: any) {
-            setError(err.message || 'Erro desconhecido ao carregar dados.');
-        } finally {
-            setIsLoading(false);
+export function useUpdateProduct() {
+    const queryClient = useQueryClient();
+
+    return useMutation<
+        Awaited<ReturnType<typeof productsApi.updateProduct>>,
+        Error,
+        { id: string, productData: UpdateProductInput }
+    >({
+        mutationFn: ({ id, productData }) => productsApi.updateProduct(id, productData),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["products", "list"] });
         }
-    }, [page, limiteInicial, apenasAtivos, termoBusca]);
+    })
+};
 
-    // Dispara a busca quando a página ou o termo de busca mudam
-    useEffect(() => {
-        // Debounce manual simples para não flodar a API enquanto o usuário digita
-        const delay = setTimeout(() => {
-            fetchProdutos();
-        }, 500);
+export function useToggleProductStatus() {
+    const queryClient = useQueryClient();
 
-        return () => clearTimeout(delay);
-    }, [fetchProdutos]);
-
-    const handleBuscar = (apenasAtivos: boolean, termo: string) => {
-        setApenasAtivos(apenasAtivos);
-        setTermoBusca(termo);
-        setPage(1);
-    };
-
-    const handleInativar = async (id: string) => {
-        if (!confirm('Tem certeza que deseja inativar este produto?')) return;
-
-        try {
-            await produtosApi.inativar(id);
-            await fetchProdutos();
-        } catch (err: any) {
-            alert(err.message);
+    return useMutation<
+        Awaited<ReturnType<typeof productsApi.toggleProductStatus>>,
+        Error,
+        { id: string, activate: boolean }
+    >({
+        mutationFn: ({ id, activate }) => productsApi.toggleProductStatus(id, activate),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["products", "list"] });
         }
-    };
-
-    return {
-        data,
-        isLoading,
-        error,
-        page,
-        setPage,
-        handleBuscar,
-        handleInativar,
-        recarregar: fetchProdutos
-    };
-}
+    })
+};
