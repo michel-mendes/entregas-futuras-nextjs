@@ -46,6 +46,9 @@ export interface FutureDeliveryProps {
     items: FutureDeliveryItemProps[];
     createdAt: Date;
     updatedAt?: Date;
+    totalPurchasedItems?: number;
+    totalDeliveredItems?: number;
+    progressPercentage?: number;
 }
 
 export class FutureDeliveryEntity {
@@ -149,11 +152,7 @@ export class FutureDeliveryEntity {
         this.setUpdateTime();
     }
 
-    public toObject(): FutureDeliveryProps & {
-        progressPercentage: number;
-        totalPurchasedItems: number;
-        totalDeliveredItems: number;
-    } {
+    public toObject(): FutureDeliveryProps {
         return {
             id: this._id,
             customer: this._customer,
@@ -218,3 +217,28 @@ export class FutureDeliveryEntity {
         this._updatedAt = new Date();
     }
 }
+
+
+// Helpers
+export interface FriendlyStatusData {
+    name: string;
+    friendlyName: string;
+};
+
+export function getFriendlyStatusNames() {
+    const statusList: FriendlyStatusData[] = [];
+
+    for (const status in FutureDeliveryStatus) {
+        statusList.push({
+            name: status,
+            friendlyName: status
+                .replaceAll("_", " ")
+                .toLowerCase()
+                .split(" ")
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")
+        });
+    };
+
+    return statusList;
+};
