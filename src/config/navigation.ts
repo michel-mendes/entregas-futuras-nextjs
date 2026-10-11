@@ -28,36 +28,32 @@ export type NavGroup = {
 
 export const navigationConfig: NavGroup[] = [
     {
-        group: 'Visão Geral',
+        group: 'Overview',
         items: [
-            // Em desenvolvimento
             // { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
         ],
     },
     {
-        group: 'Estoque',
+        group: 'Inventory',
         items: [
             { name: 'Products', href: '/products', icon: Package },
-            { name: 'Lotes', href: '/batches', icon: Boxes }
+            { name: 'Batches', href: '/batches', icon: Boxes }
         ],
     },
     {
-        group: 'Operações',
+        group: 'Operations',
         items: [
-            // Em desenvolvimento
-            { name: 'Entregas Futuras', href: '/entregas-futuras', icon: CalendarClock },
-            { name: 'Romaneios', href: '/romaneios', icon: Truck },
+            { name: 'Future Deliveries', href: '/future-deliveries', icon: CalendarClock },
+            { name: 'Delivery Receipts', href: '/delivery-receipts', icon: Truck },
             { name: 'Warehouses', href: '/warehouses', icon: Warehouse },
-            // { name: 'Pedidos', href: '/pedidos', icon: ShoppingCart },
         ],
     },
     /*{
-        group: 'Gestão',
+        group: 'Management',
         items: [
-            // Em desenvolvimento
-            // { name: 'Clientes', href: '/clientes', icon: Users },
-            // { name: 'Relatórios', href: '/relatorios', icon: BarChart2 },
-            // { name: 'Configurações', href: '/configuracoes', icon: Settings },
+            // { name: 'Customers', href: '/customers', icon: Users },
+            // { name: 'Reports', href: '/reports', icon: BarChart2 },
+            // { name: 'Settings', href: '/settings', icon: Settings },
         ],
     },*/
 ];
