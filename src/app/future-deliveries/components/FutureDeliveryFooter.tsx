@@ -32,7 +32,7 @@ export function FutureDeliveryFooter({
                         type="button"
                         disabled={currentPage <= 1 || isFetching}
                         onClick={() => onPageChange(currentPage - 1)}
-                        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs font-semibold transition hover:bg-subtle disabled:cursor-not-allowed disabled:opacity-40"
+                        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs font-semibold transition hover:bg-subtle disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
                     >
                         <ChevronLeft className="h-3.5 w-3.5" />
                         Previous
@@ -42,7 +42,7 @@ export function FutureDeliveryFooter({
                         type="button"
                         disabled={currentPage >= totalPages || isFetching}
                         onClick={() => onPageChange(currentPage + 1)}
-                        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs font-semibold transition hover:bg-subtle disabled:cursor-not-allowed disabled:opacity-40"
+                        className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs font-semibold transition hover:bg-subtle disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
                     >
                         Next
                         <ChevronRight className="h-3.5 w-3.5" />

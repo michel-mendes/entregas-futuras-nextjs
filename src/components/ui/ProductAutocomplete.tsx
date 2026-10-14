@@ -1,17 +1,17 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { IProduto } from '@/modules/produto/produto.types';
-import { produtosApi } from '@/modules/produto/produto.api';
+import { ProductProps } from '@/modules/product/domain/product.entity';
+import { productsApi } from '@/modules/product/presentation/product.api';
 
 interface ProductAutocompleteProps {
-    onSelect: (produto: IProduto) => void;
+    onSelect: (produto: ProductProps) => void;
     error?: string;
 }
 
 export function ProductAutocomplete({ onSelect, error }: ProductAutocompleteProps) {
     const [termo, setTermo] = useState('');
-    const [resultados, setResultados] = useState<IProduto[]>([]);
+    const [resultados, setResultados] = useState<ProductProps[]>([]);
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
@@ -39,13 +39,14 @@ export function ProductAutocomplete({ onSelect, error }: ProductAutocompleteProp
             setLoading(true);
             try {
                 // Utilizando a API que você forneceu
-                const response = await produtosApi.listar({
+                const response = await productsApi.fetchProducts({
                     page: 1,
                     limit: 10,
-                    apenasAtivos: true,
-                    termoBusca: termo
+                    active: "ACTIVE",
+                    name: termo,
                 });
-                setResultados(response.data);
+                
+                setResultados(response.data ?? []);
                 setIsOpen(true);
             } catch (err) {
                 console.error("Erro ao buscar produtos", err);
@@ -57,7 +58,7 @@ export function ProductAutocomplete({ onSelect, error }: ProductAutocompleteProp
         return () => clearTimeout(delayDebounceFn);
     }, [termo]);
 
-    const handleSelect = (produto: IProduto) => {
+    const handleSelect = (produto: ProductProps) => {
         onSelect(produto);
         setTermo('');
         setIsOpen(false);
@@ -95,10 +96,10 @@ export function ProductAutocomplete({ onSelect, error }: ProductAutocompleteProp
                             className="px-4 py-2 hover:bg-subtle cursor-pointer border-b border-border-subtle last:border-0 flex justify-between items-center"
                         >
                             <div>
-                                <p className="text-sm font-medium text-primary">{prod.descricao}</p>
-                                <p className="text-xs text-tertiary">SKU: {prod.codigoSKU}</p>
+                                <p className="text-sm font-medium text-primary">{prod.name}</p>
+                                <p className="text-xs text-tertiary">SKU: {prod.skuCode}</p>
                             </div>
-                            <button className="text-xs font-semibold text-brand bg-brand-muted px-2 py-1 rounded-md">
+                            <button type='button' className="text-xs font-semibold text-brand bg-brand-muted px-2 py-1 rounded-md">
                                 Adicionar
                             </button>
                         </li>

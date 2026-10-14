@@ -95,7 +95,7 @@ export function FutureDeliveryFilters({
                                 status: e.target.value as FutureDeliveryStatus,
                             }))
                         }
-                        className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20"
+                        className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/20 cursor-pointer"
                     >
                         {statusesNames.map((status) => (
                             <option key={status.name} value={status.name}>
@@ -110,7 +110,7 @@ export function FutureDeliveryFilters({
                     <button
                         type="button"
                         onClick={onClearFilters}
-                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2.5 text-sm font-medium text-secondary transition hover:bg-subtle focus:outline-none focus:ring-2 focus:ring-border"
+                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2.5 text-sm font-medium text-secondary transition hover:bg-subtle focus:outline-none focus:ring-2 focus:ring-border cursor-pointer"
                     >
                         <RotateCcw className="h-4 w-4" />
                         Clear
@@ -118,7 +118,7 @@ export function FutureDeliveryFilters({
 
                     <button
                         type="submit"
-                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-secondary px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-primary focus:outline-none focus:ring-2 focus:ring-secondary/20"
+                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-secondary px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-primary focus:outline-none focus:ring-2 focus:ring-secondary/20 cursor-pointer"
                     >
                         <Search className="h-4 w-4" />
                         Apply
