@@ -45,7 +45,7 @@ const DeliveryReceiptItemSchema = new Schema<DeliveryReceiptItemDocument>(
     {
         productId: { type: Schema.Types.ObjectId, ref: 'Product', required: true, index: true },
         batchId: { type: String, trim: true, default: undefined, index: true },
-        quantity: { type: Number, required: true, min: 1 },
+        quantity: { type: Number, required: true, min: 0.01 },
         itemNotes: { type: String, trim: true, default: undefined },
     },
     { _id: true }

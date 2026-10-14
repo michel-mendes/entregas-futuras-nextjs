@@ -25,6 +25,6 @@ export interface DeliveryReceiptRepository {
     findByFutureDeliveryId(futureDeliveryId: string): Promise<DeliveryReceiptEntity[]>;
     findBySaleId(saleId: string): Promise<DeliveryReceiptEntity[]>;
     findAll(filter: DeliveryReceiptFilter): Promise<FindAllDeliveryReceiptsResponse>;
-    save(deliveryReceipt: DeliveryReceiptEntity): Promise<DeliveryReceiptEntity>;
+    save(deliveryReceipt: DeliveryReceiptEntity, options?: { session?: unknown }): Promise<DeliveryReceiptEntity>;
     cancel(id: string): Promise<DeliveryReceiptEntity | null>;
 }

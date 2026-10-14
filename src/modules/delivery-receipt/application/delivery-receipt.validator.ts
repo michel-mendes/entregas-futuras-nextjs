@@ -13,18 +13,18 @@ export const RecipientSchema = z.object({
 });
 
 export const DeliveryReceiptItemSchema = z.object({
+    itemId: objectIdSchema,
     productId: objectIdSchema,
     batchId: z.string().trim().optional(),
     quantity: z
         .number({ message: 'Quantity must be a number' })
-        .int('Quantity must be an integer')
         .positive('Quantity must be greater than zero'),
     itemNotes: z.string().trim().optional(),
 });
 
 export const CreateDeliveryReceiptSchema = z.object({
     futureDeliveryId: objectIdSchema,
-    saleId: z.string().trim().min(1, 'Sale ID is required'),
+    saleId: z.string().trim().optional(),
     saleType: z.string().trim().min(1, 'Sale type is required'),
     deliveryNumber: z.string().trim().min(1, 'Delivery number is required'),
     deliveryDate: z.coerce.date({ message: 'Invalid delivery date format' }),
@@ -58,6 +58,7 @@ export const ListDeliveryReceiptsQuerySchema = z.object({
 
 // Type Inferences
 export type CreateDeliveryReceiptInput = z.infer<typeof CreateDeliveryReceiptSchema>;
+export type DeliveryReceiptItemInput = z.infer<typeof DeliveryReceiptItemSchema>;
 export type AddItemToReceiptInput = z.infer<typeof AddItemToReceiptSchema>;
 export type DeliveryReceiptIdParam = z.infer<typeof DeliveryReceiptIdParamSchema>;
 export type ListDeliveryReceiptsQuery = z.infer<typeof ListDeliveryReceiptsQuerySchema>;

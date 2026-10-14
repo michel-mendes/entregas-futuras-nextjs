@@ -14,6 +14,7 @@ export interface FutureDeliveryItemProps {
 }
 
 export interface PartialDeliveryItemProps {
+    itemId: string;
     productId: string;
     quantityToDeliver: number;
 }
@@ -117,9 +118,9 @@ export class FutureDeliveryEntity {
         }
 
         for (const i in itemsToDeliver) {
-            const productId = itemsToDeliver[i].productId;
+            const itemId = itemsToDeliver[i].itemId;
             const quantityToDeliver = itemsToDeliver[i].quantityToDeliver;
-            const itemIndex = this._items.findIndex(item => item.productId === productId)
+            const itemIndex = this._items.findIndex(item => item.id === itemId)
 
             if (itemIndex === -1) {
                 throw new Error('Product not found in this delivery.');
@@ -133,6 +134,11 @@ export class FutureDeliveryEntity {
             const newDeliveredTotal = item.deliveredQuantity + quantityToDeliver;
 
             if (newDeliveredTotal > item.purchasedQuantity) {
+                // console.log("\n\n\nItem a ser entregue: ", item.description);
+                // console.log("\n\n\nQauntidade comprada: ", item.purchasedQuantity);
+                // console.log("\n\n\nQauntidade já entregue: ", item.deliveredQuantity);
+                // console.log("\n\n\nRestante a entregar: ", item.purchasedQuantity - item.deliveredQuantity);
+                // console.log("\n\n\nQuantidade a baixar no romaneio: ", quantityToDeliver);
                 throw new Error(`Cannot deliver ${quantityToDeliver}. Exceeds purchased quantity for product ${item.description}.`);
             }
 

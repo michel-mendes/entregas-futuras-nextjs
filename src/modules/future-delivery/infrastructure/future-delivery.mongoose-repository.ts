@@ -1,4 +1,4 @@
-import { Types, QueryFilter } from 'mongoose';
+import { Types, QueryFilter, ClientSession } from 'mongoose';
 import { FutureDeliveryModel, FutureDeliveryDocument } from './future-delivery.model';
 import { FutureDeliveryEntity } from '../domain/future-delivery.entity';
 import {
@@ -65,12 +65,12 @@ export class MongooseFutureDeliveryRepository implements FutureDeliveryRepositor
     // Repository Interface Implementation
     // --------------------------------------------------------------
 
-    async findById(id: string): Promise<FutureDeliveryEntity | null> {
+    async findById(id: string, options?: { session?: ClientSession; }): Promise<FutureDeliveryEntity | null> {
         if (!Types.ObjectId.isValid(id)) {
             return null;
         }
 
-        const doc = await this.futureDeliveryModel.findById(id).lean<FutureDeliveryDocument>().exec();
+        const doc = await this.futureDeliveryModel.findById(id, null, {session: options?.session}).lean<FutureDeliveryDocument>().exec();
 
         if (!doc) {
             return null;
@@ -138,7 +138,7 @@ export class MongooseFutureDeliveryRepository implements FutureDeliveryRepositor
         };
     }
 
-    async save(delivery: FutureDeliveryEntity): Promise<FutureDeliveryEntity> {
+    async save(delivery: FutureDeliveryEntity, options?: { session?: ClientSession; }): Promise<FutureDeliveryEntity> {
         const props = delivery.toObject();
         const documentProps = this.toDocumentProps(props);
 
@@ -148,7 +148,7 @@ export class MongooseFutureDeliveryRepository implements FutureDeliveryRepositor
                 .findByIdAndUpdate(
                     props.id,
                     { $set: documentProps },
-                    { new: true, runValidators: true }
+                    { new: true, runValidators: true, session: options?.session }
                 )
                 .lean<FutureDeliveryDocument>()
                 .exec();

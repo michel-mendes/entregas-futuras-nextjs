@@ -1,4 +1,4 @@
-import { Types, QueryFilter } from 'mongoose';
+import { Types, QueryFilter, ClientSession } from 'mongoose';
 import { DeliveryReceiptModel, DeliveryReceiptDocument } from './delivery-receipt.model';
 import { DeliveryReceiptEntity } from '../domain/delivery-receipt.entity';
 import {
@@ -162,7 +162,8 @@ export class MongooseDeliveryReceiptRepository implements DeliveryReceiptReposit
         };
     }
 
-    async save(deliveryReceipt: DeliveryReceiptEntity): Promise<DeliveryReceiptEntity> {
+    async save(deliveryReceipt: DeliveryReceiptEntity, options?: { session?: ClientSession; }): Promise<DeliveryReceiptEntity> {
+    // async save(deliveryReceipt: DeliveryReceiptEntity): Promise<DeliveryReceiptEntity> {
         const props = deliveryReceipt.toObject();
         const documentProps = this.toDocumentProps(props);
 
@@ -172,7 +173,7 @@ export class MongooseDeliveryReceiptRepository implements DeliveryReceiptReposit
                 .findByIdAndUpdate(
                     props.id,
                     { $set: documentProps },
-                    { new: true, runValidators: true }
+                    { new: true, runValidators: true, session: options?.session }
                 )
                 .lean<DeliveryReceiptDocument>()
                 .exec();

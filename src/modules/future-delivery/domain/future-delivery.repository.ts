@@ -19,8 +19,8 @@ export interface FindAllFutureDeliveriesResponse {
 }
 
 export interface FutureDeliveryRepository {
-    findById(id: string): Promise<FutureDeliveryEntity | null>;
+    findById(id: string, options?: { session?: unknown }): Promise<FutureDeliveryEntity | null>;
     findByCustomerDocument(document: string): Promise<FutureDeliveryEntity[]>;
     findAll(filter: FutureDeliveryFilter): Promise<FindAllFutureDeliveriesResponse>;
-    save(delivery: FutureDeliveryEntity): Promise<FutureDeliveryEntity>;
+    save(delivery: FutureDeliveryEntity, options?: { session?: unknown }): Promise<FutureDeliveryEntity>;
 }

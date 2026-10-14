@@ -41,13 +41,12 @@ export const FutureDeliveryItemSchema = z
         description: z.string().trim().min(1, 'Product description is required'),
         purchasedQuantity: z
             .number('Purchased quantity must be a number')
-            .int('Purchased quantity must be an integer')
+            // .int('Purchased quantity must be an integer')
             .positive('Purchased quantity must be greater than zero'),
         deliveredQuantity: z
             .number('Delivered quantity must be a number')
-            .int('Delivered quantity must be an integer')
+            // .int('Delivered quantity must be an integer')
             .nonnegative('Delivered quantity cannot be negative')
-            .default(0),
     })
     .superRefine((data, ctx) => {
         if (data.deliveredQuantity > data.purchasedQuantity) {

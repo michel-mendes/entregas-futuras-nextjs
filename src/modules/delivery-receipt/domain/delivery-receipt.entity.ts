@@ -21,7 +21,7 @@ export interface DeliveryReceiptItemProps {
 export interface DeliveryReceiptProps {
     id?: string;
     futureDeliveryId: string;
-    saleId: string;
+    saleId?: string;
     saleType: string;
     deliveryNumber: string;
     deliveryDate: Date;
@@ -36,7 +36,7 @@ export interface DeliveryReceiptProps {
 export class DeliveryReceiptEntity {
     private readonly _id?: string;
     private readonly _futureDeliveryId: string;
-    private readonly _saleId: string;
+    private readonly _saleId?: string;
     private readonly _createdAt: Date;
     private _saleType: string;
     private _deliveryNumber: string;
@@ -67,7 +67,7 @@ export class DeliveryReceiptEntity {
     // Getters
     get id(): string | undefined { return this._id; }
     get futureDeliveryId(): string { return this._futureDeliveryId; }
-    get saleId(): string { return this._saleId; }
+    get saleId(): string | undefined { return this._saleId; }
     get saleType(): string { return this._saleType; }
     get deliveryNumber(): string { return this._deliveryNumber; }
     get deliveryDate(): Date { return this._deliveryDate; }
