@@ -149,3 +149,28 @@ export class DeliveryReceiptEntity {
         this._updatedAt = new Date();
     }
 }
+
+
+// Helpers
+export interface FriendlyDeliveryReceiptStatusFilterName {
+    name: string;
+    friendlyName: string;
+};
+
+export function getFriendlyReceiptStatusNames() {
+    const statusList: FriendlyDeliveryReceiptStatusFilterName[] = [];
+
+    for (const status in DeliveryReceiptStatus) {
+        statusList.push({
+            name: status,
+            friendlyName: status
+                .replaceAll("_", " ")
+                .toLowerCase()
+                .split(" ")
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")
+        });
+    };
+
+    return statusList;
+};
