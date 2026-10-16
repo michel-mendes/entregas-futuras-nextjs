@@ -5,12 +5,12 @@ import { BatchRepository, BatchSearchFilters, SearchBatchResponse } from "../dom
 import { BatchDocument } from "./batch.model";
 
 import { IWarehouseDocument } from "@/modules/warehouse/infrastructure/warehouse.model";
-import { IProduto } from "@/modules/produto/produto.types";
+import { ProductDocument } from "@/modules/product/infrasctructure/product.model";
 
 export class MongoBatchRepository implements BatchRepository {
     constructor(
         private readonly batchModel: Model<BatchDocument>,
-        private readonly produtoModel: Model<IProduto>,
+        private readonly produtoModel: Model<ProductDocument>,
         private readonly warehouseModel: Model<IWarehouseDocument>
     ) { }
 
@@ -34,7 +34,7 @@ export class MongoBatchRepository implements BatchRepository {
             createdAt: document.createdAt,
             updatedAt: document.updatedAt,
         });
-        
+
         return entity;
     }
 
@@ -66,7 +66,7 @@ export class MongoBatchRepository implements BatchRepository {
             ).lean();
 
             if (warehouses.length === 0) return this.emptyResponse();
-            
+
             query.warehouseId = { $in: warehouses.map(w => w._id) };
         }
 
@@ -136,7 +136,7 @@ export class MongoBatchRepository implements BatchRepository {
         return (document) ? this.toDomain(document) : null;
     }
 
-    
+
     // Helpers
     private emptyResponse(): SearchBatchResponse {
         return { data: [], totalPages: 0, totalRecords: 0 };

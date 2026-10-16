@@ -4,14 +4,14 @@ import { CreateBatchDTO } from "./batch.validator";
 import { BatchEntity, BatchProps } from "../domain/batch.entity";
 import { MongoBatchRepository } from "../infrastructure/batch.mongo.repository";
 import { BatchModel } from "../infrastructure/batch.model";
-import { Produto } from "@/modules/produto/produto.model";
+import { ProductModel } from "@/modules/product/infrasctructure/product.model";
 import { WarehouseModel } from "@/modules/warehouse/infrastructure/warehouse.model";
 
 export class BatchService {
     constructor(private readonly batchRepository: BatchRepository) { }
 
     async createBatch(data: CreateBatchDTO): Promise<BatchProps> {
-        
+
         const newBatchEntity = new BatchEntity({
             productId: data.productId,
             warehouseId: data.warehouseId,
@@ -32,7 +32,7 @@ export class BatchService {
 
         return createdBatch.toObject();
     }
-    
+
     async searchBatches(params: BatchSearchFilters): Promise<PaginatedResponse<BatchProps>> {
         const response = await this.batchRepository.search(params);
 
@@ -53,7 +53,7 @@ export class BatchService {
 }
 
 export function makeBatchService(): BatchService {
-    const batchRepository = new MongoBatchRepository(BatchModel, Produto, WarehouseModel);
+    const batchRepository = new MongoBatchRepository(BatchModel, ProductModel, WarehouseModel);
 
     return new BatchService(batchRepository);
 }
